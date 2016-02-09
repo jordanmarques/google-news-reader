@@ -1,7 +1,8 @@
-package com.jojo.googlenewsreader;
+package com.jojo.googlenewsreader.articles;
 
 import android.os.AsyncTask;
 
+import com.jojo.googlenewsreader.activities.Home;
 import com.jojo.googlenewsreader.articles.ListArticles;
 
 import java.io.BufferedReader;
@@ -28,7 +29,7 @@ public class JSONAsyncTask extends AsyncTask<Void, Void, Void> {
             for(int i = 0; i<jsonString.length(); i++) {
                 listTitles[i] = jsonString.getJSONObject(i).getString("title");
             }
-            MainActivity.listArticles = new ListArticles(listTitles, jsonString);
+            Home.listArticles = new ListArticles(listTitles, jsonString);
         }
         catch (IOException | JSONException error) {
             error.printStackTrace();

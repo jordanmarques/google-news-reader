@@ -10,18 +10,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".MainActivity" >
+        <activity android:name=".activities.Home" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main2Activity" >
+        <activity android:name=".activities.ArticleDetail" >
         </activity>
-        <activity android:name=".Main22Activity" >
+        <activity android:name=".activities.WebView" >
         </activity>
-        <activity android:name=".Main23Activity" >
+        <activity android:name=".activities.TagManager" >
         </activity>
     </application>
 

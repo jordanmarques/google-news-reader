@@ -1,4 +1,4 @@
-package com.jojo.googlenewsreader;
+package com.jojo.googlenewsreader.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,22 +6,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.jojo.googlenewsreader.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Main2Activity extends AppCompatActivity {
+public class ArticleDetail extends AppCompatActivity {
 
     protected JSONObject article;
     public static String urlArticle;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_article_detail);
         final Intent intent = getIntent();
         try {
-            this.article = new JSONObject(intent.getStringExtra(MainActivity.selectedArticle));
+            this.article = new JSONObject(intent.getStringExtra(Home.selectedArticle));
             String titre = this.article.getString("title");
             TextView title = (TextView)findViewById(R.id.title);
             title.setText(titre);
@@ -34,7 +35,7 @@ public class Main2Activity extends AppCompatActivity {
         Button button = (Button) findViewById(R.id.openWebView);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(Main2Activity.this, Main22Activity.class);
+                Intent intent = new Intent(ArticleDetail.this, WebView.class);
                 try {
                     intent.putExtra(urlArticle, article.getString("url"));
                 }

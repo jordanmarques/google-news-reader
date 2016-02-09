@@ -1,4 +1,4 @@
-package com.jojo.googlenewsreader;
+package com.jojo.googlenewsreader.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,15 +7,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.jojo.googlenewsreader.R;
+import com.jojo.googlenewsreader.articles.JSONAsyncTask;
 import com.jojo.googlenewsreader.articles.ListArticles;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 
-public class MainActivity extends AppCompatActivity {
+public class Home extends AppCompatActivity {
     public ListView viewById;
     public static ListArticles listArticles = new ListArticles();
     public static String selectedArticle;
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
         JSONAsyncTask task = new JSONAsyncTask();
         task.execute();
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Show Alert
                 try {
-                    Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                    Intent intent = new Intent(Home.this, ArticleDetail.class);
                     intent.putExtra(selectedArticle, listArticles.articles.get(itemPosition).toString());
                     startActivityForResult(intent, 0);
                     //Toast.makeText(getApplicationContext(), "Position:"+itemPosition+"  ListItem : " +itemIdAtPosition+ "JSONContent :"+ listArticles.articles.get(itemPosition) , Toast.LENGTH_LONG).show();
