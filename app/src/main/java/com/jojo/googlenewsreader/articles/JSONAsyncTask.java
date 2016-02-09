@@ -1,35 +1,44 @@
 package com.jojo.googlenewsreader.articles;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
-import com.jojo.googlenewsreader.activities.Home;
-import com.jojo.googlenewsreader.articles.ListArticles;
+import com.jojo.googlenewsreader.activities.MainActivity;
+import com.jojo.googlenewsreader.pojo.Article;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by Arnaud Flaesch on 31/01/2016.
- */
 public class JSONAsyncTask extends AsyncTask<Void, Void, Void> {
     private String APIUrl = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0";
+    private String query;
 
 
     @Override
     protected Void doInBackground(Void... params) {
+        query = "barack%20obama";
         try {
             JSONArray jsonString = getJsonFromServer(APIUrl+"&q=barack%20obama");
             String[] listTitles = new String[jsonString.length()];
+            List<Article> articles = new ArrayList<>();
             for(int i = 0; i<jsonString.length(); i++) {
+                Article temporyArticle = new Article();
+                articles.add(new Article(jsonString.getJSONObject(i).getString("title"),
+                        jsonString.getJSONObject(i).getString("content"),
+                        jsonString.getJSONObject(i).getString("image")));
+
                 listTitles[i] = jsonString.getJSONObject(i).getString("title");
             }
-            Home.listArticles = new ListArticles(listTitles, jsonString);
+            MainActivity.setListArticles(new ListArticles(listTitles, articles));
         }
         catch (IOException | JSONException error) {
             error.printStackTrace();
