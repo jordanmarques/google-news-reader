@@ -3,6 +3,7 @@ package com.jojo.googlenewsreader.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,21 +29,24 @@ public class ArticleDetail extends AppCompatActivity {
         TextView title = (TextView)findViewById(R.id.title);
         TextView description = (TextView)findViewById(R.id.description);
 
-        title.setText(article.getTitle());
-        description.setText(article.getContent());
+        title.setText(Html.fromHtml(article.getTitle()));
+        description.setText(Html.fromHtml(article.getContent()));
 
 
-        Button button = (Button) findViewById(R.id.openWebView);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button webViewButton = (Button) findViewById(R.id.openWebView);
+        webViewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ArticleDetail.this, WebView.class);
-//                try {
-//                    intent.putExtra(urlArticle, article.getString("url"));
-//                }
-//                catch (JSONException error) {
-//
-//                }
-                startActivity(intent);
+                intent.putExtra(urlArticle, article.getUrl());
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        Button backButton = (Button) findViewById(R.id.button5);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }

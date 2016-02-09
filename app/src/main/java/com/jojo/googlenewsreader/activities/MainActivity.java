@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, ArticleDetail.class);
                 intent.putExtra("articleForDetailActivity", listArticles.getArticles().get(itemPosition));
-
                 startActivityForResult(intent, 0);
             }
         });

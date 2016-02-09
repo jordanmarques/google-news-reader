@@ -34,7 +34,8 @@ public class JSONAsyncTask extends AsyncTask<Void, Void, Void> {
                 Article temporyArticle = new Article();
                 articles.add(new Article(jsonString.getJSONObject(i).getString("title"),
                         jsonString.getJSONObject(i).getString("content"),
-                        jsonString.getJSONObject(i).getString("image")));
+                        jsonString.getJSONObject(i).getJSONObject("image").getString("url"),
+                        jsonString.getJSONObject(i).getString("url")));
 
                 listTitles[i] = jsonString.getJSONObject(i).getString("title");
             }
