@@ -19,9 +19,10 @@ import org.json.JSONException;
 
 
 public class MainActivity extends AppCompatActivity {
+
     public ListView viewById;
     public static ListArticles listArticles = new ListArticles();
-    public static Article articleForDetailActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,22 +31,12 @@ public class MainActivity extends AppCompatActivity {
         JSONAsyncTask task = new JSONAsyncTask();
         task.execute();
 
-        // Get ListView object from xml
         viewById = (ListView) findViewById(R.id.listView);
-
-        // Define a new Adapter
-        // First parameter - Context
-        // Second parameter - Layout for the row
-        // Third parameter - ID of the TextView to which the data is written
-        // Forth - the Array of data
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, listArticles.getListTitles());
 
-
-        // Assign adapter to ListView
         viewById.setAdapter(adapter);
 
-        // ListView Item Click Listener
         viewById.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

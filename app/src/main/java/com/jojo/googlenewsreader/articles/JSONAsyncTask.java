@@ -24,6 +24,12 @@ public class JSONAsyncTask extends AsyncTask<Void, Void, Void> {
 
 
     @Override
+    protected void onPreExecute() {
+        String[] preLoadMessage = new String[]{"Chargements des news..."};
+        MainActivity.setListArticles(new ListArticles(preLoadMessage, new ArrayList()));
+    }
+
+    @Override
     protected Void doInBackground(Void... params) {
         query = "barack%20obama";
         try {

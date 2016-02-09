@@ -2,8 +2,6 @@ package com.jojo.googlenewsreader.articles;
 
 import com.jojo.googlenewsreader.pojo.Article;
 
-import org.json.JSONArray;
-
 import java.util.List;
 
 public class ListArticles {
@@ -11,7 +9,6 @@ public class ListArticles {
     public List articles;
 
     public ListArticles() {
-        this.listTitles = new String[]{"Chargements des news..."};
     }
 
     public ListArticles(String[] listTitles, List articles) {
