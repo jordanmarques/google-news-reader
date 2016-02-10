@@ -29,6 +29,10 @@ public class ArticleDetail extends AppCompatActivity {
         TextView title = (TextView)findViewById(R.id.title);
         TextView description = (TextView)findViewById(R.id.description);
 
+        if(Html.fromHtml(article.getTitle()).length() > 55){
+            article.setTitle(Html.fromHtml(article.getTitle()).subSequence(0,50) + "...");
+        }
+
         title.setText(Html.fromHtml(article.getTitle()));
         description.setText(Html.fromHtml(article.getContent()));
 

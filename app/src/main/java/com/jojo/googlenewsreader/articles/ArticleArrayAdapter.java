@@ -24,8 +24,8 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View line = layoutInflater.inflate(R.layout.article_line, null);
 
-        ImageView image = (ImageView) line.findViewById(R.id.imageViewArticle);
         TextView text = (TextView) line.findViewById(R.id.textViewArticle);
+        ImageView image = (ImageView) line.findViewById(R.id.imageViewArticle);
 
         Article article  = getItem(position);
 
