@@ -1,8 +1,15 @@
 package com.jojo.googlenewsreader.articles;
 
+import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
+import android.text.Html;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.activities.MainActivity;
 import com.jojo.googlenewsreader.pojo.Article;
 
@@ -18,15 +25,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JSONAsyncTask extends AsyncTask<Void, Void, Void> {
+public class ArticleListAsyncTask extends AsyncTask<Void, Void, Void> {
     private String APIUrl = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0";
     private String query;
+    private Context context;
+    private ListView listView;
+    private ArticleList articleList;
+
+    public ArticleListAsyncTask(Context context, ListView listView) {
+        this.context = context;
+        this.listView = listView;
+    }
 
 
     @Override
     protected void onPreExecute() {
-        String[] preLoadMessage = new String[]{"Chargements des news..."};
-        MainActivity.setListArticles(new ListArticles(preLoadMessage, new ArrayList()));
+        articleList = new ArticleList(new String[]{"Chargement en cours ..."}, new ArrayList());
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, android.R.id.text1, articleList.getListTitles());
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -37,7 +53,6 @@ public class JSONAsyncTask extends AsyncTask<Void, Void, Void> {
             String[] listTitles = new String[jsonString.length()];
             List<Article> articles = new ArrayList<>();
             for(int i = 0; i<jsonString.length(); i++) {
-                Article temporyArticle = new Article();
                 articles.add(new Article(jsonString.getJSONObject(i).getString("title"),
                         jsonString.getJSONObject(i).getString("content"),
                         jsonString.getJSONObject(i).getJSONObject("image").getString("url"),
@@ -45,7 +60,7 @@ public class JSONAsyncTask extends AsyncTask<Void, Void, Void> {
 
                 listTitles[i] = jsonString.getJSONObject(i).getString("title");
             }
-            MainActivity.setListArticles(new ListArticles(listTitles, articles));
+            articleList = new ArticleList(listTitles, articles);
         }
         catch (IOException | JSONException error) {
             error.printStackTrace();
@@ -55,8 +70,9 @@ public class JSONAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        super.onPostExecute(result);
-
+        MainActivity.setArticleList(articleList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, android.R.id.text1, articleList.getListTitles());
+        listView.setAdapter(adapter);
     }
 
     public static JSONArray getJsonFromServer(String url) throws IOException {

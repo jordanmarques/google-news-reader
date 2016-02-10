@@ -4,14 +4,14 @@ import com.jojo.googlenewsreader.pojo.Article;
 
 import java.util.List;
 
-public class ListArticles {
+public class ArticleList {
     public String[] listTitles;
     public List articles;
 
-    public ListArticles() {
+    public ArticleList() {
     }
 
-    public ListArticles(String[] listTitles, List articles) {
+    public ArticleList(String[] listTitles, List articles) {
         this.listTitles = listTitles;
         this.articles = articles;
     }
