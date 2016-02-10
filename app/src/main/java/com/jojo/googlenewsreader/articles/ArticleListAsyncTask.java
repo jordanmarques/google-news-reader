@@ -71,8 +71,8 @@ public class ArticleListAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         MainActivity.setArticleList(articleList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, android.R.id.text1, articleList.getListTitles());
-        listView.setAdapter(adapter);
+        ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(context, R.layout.article_line, articleList.getArticles());
+        listView.setAdapter(arrayAdapter);
     }
 
     public static JSONArray getJsonFromServer(String url) throws IOException {
