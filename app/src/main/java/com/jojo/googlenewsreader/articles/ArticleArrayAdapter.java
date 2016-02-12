@@ -26,10 +26,10 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
 
         TextView text = (TextView) line.findViewById(R.id.textViewArticle);
         ImageView image = (ImageView) line.findViewById(R.id.imageViewArticle);
-
         Article article  = getItem(position);
 
         text.setText(Html.fromHtml(article.getTitle()));
+
         ImageDownloadAsyncTask imageDownloadAsyncTask = new ImageDownloadAsyncTask(image, article.getImageUrl());
         imageDownloadAsyncTask.execute();
 

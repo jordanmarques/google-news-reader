@@ -21,7 +21,7 @@
         </activity>
         <activity android:name=".activities.ArticleDetail" >
         </activity>
-        <activity android:name=".activities.WebView" >
+        <activity android:name=".activities.BrowserView" >
         </activity>
         <activity android:name=".activities.TagManager" >
         </activity>

@@ -25,14 +25,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ArticleListAsyncTask extends AsyncTask<Void, Void, Void> {
+public class LoadArticleAsyncTask extends AsyncTask<Void, Void, Void> {
     private String APIUrl = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0";
     private String query;
     private Context context;
     private ListView listView;
     private ArticleList articleList;
 
-    public ArticleListAsyncTask(Context context, ListView listView) {
+    public LoadArticleAsyncTask(Context context, ListView listView) {
         this.context = context;
         this.listView = listView;
     }

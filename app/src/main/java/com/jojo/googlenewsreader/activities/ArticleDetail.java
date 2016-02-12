@@ -11,9 +11,6 @@ import android.widget.TextView;
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.pojo.Article;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class ArticleDetail extends AppCompatActivity {
 
     private Article article;
@@ -40,7 +37,7 @@ public class ArticleDetail extends AppCompatActivity {
         Button webViewButton = (Button) findViewById(R.id.openWebView);
         webViewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ArticleDetail.this, WebView.class);
+                Intent intent = new Intent(ArticleDetail.this, BrowserView.class);
                 intent.putExtra(urlArticle, article.getUrl());
                 startActivityForResult(intent, 0);
             }

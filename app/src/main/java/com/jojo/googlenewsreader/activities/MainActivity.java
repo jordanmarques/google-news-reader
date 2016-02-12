@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.jojo.googlenewsreader.R;
-import com.jojo.googlenewsreader.articles.ArticleListAsyncTask;
+import com.jojo.googlenewsreader.articles.LoadArticleAsyncTask;
 import com.jojo.googlenewsreader.articles.ArticleList;
 
 
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         listView = (ListView) findViewById(R.id.listView);
 
-        ArticleListAsyncTask task = new ArticleListAsyncTask(this, listView);
+        LoadArticleAsyncTask task = new LoadArticleAsyncTask(this, listView);
         task.execute();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
