@@ -1,4 +1,4 @@
-package com.jojo.googlenewsreader.articles;
+package com.jojo.googlenewsreader.asyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -11,13 +11,17 @@ import android.widget.TextView;
 
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.activities.MainActivity;
+import com.jojo.googlenewsreader.articles.ArticleArrayAdapter;
+import com.jojo.googlenewsreader.articles.ArticleList;
 import com.jojo.googlenewsreader.pojo.Article;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,17 +30,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoadArticleAsyncTask extends AsyncTask<Void, Void, Void> {
-    private String APIUrl = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0";
+
+    private static final String APIUrl = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=";
+    
     private String query;
     private Context context;
     private ListView listView;
     private ArticleList articleList;
 
+    public LoadArticleAsyncTask(Context context, ListView listView, String query) {
+        this.context = context;
+        this.listView = listView;
+        this.query = query;
+    }
+
     public LoadArticleAsyncTask(Context context, ListView listView) {
         this.context = context;
         this.listView = listView;
     }
-
 
     @Override
     protected void onPreExecute() {
@@ -47,9 +58,15 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        query = "barack%20obama";
+
         try {
-            JSONArray jsonString = getJsonFromServer(APIUrl+"&q=barack%20obama");
+            query = URLEncoder.encode(query, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JSONArray jsonString = getJsonFromServer(APIUrl+query);
             String[] listTitles = new String[jsonString.length()];
             List<Article> articles = new ArrayList<>();
             for(int i = 0; i<jsonString.length(); i++) {

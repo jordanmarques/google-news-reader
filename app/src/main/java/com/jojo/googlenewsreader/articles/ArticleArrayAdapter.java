@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jojo.googlenewsreader.R;
+import com.jojo.googlenewsreader.asyncTasks.ImageDownloadAsyncTask;
 import com.jojo.googlenewsreader.pojo.Article;
 
 import java.util.List;

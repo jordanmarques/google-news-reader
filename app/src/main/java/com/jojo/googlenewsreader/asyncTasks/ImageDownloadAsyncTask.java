@@ -1,4 +1,4 @@
-package com.jojo.googlenewsreader.articles;
+package com.jojo.googlenewsreader.asyncTasks;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
