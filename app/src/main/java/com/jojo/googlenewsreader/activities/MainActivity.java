@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        Test DAO
 //        ArticleDAO articleDAO = new ArticleDAO(this);
-//        articleDAO.insertArticle(new Article("Title", "Content", "imageUrl", "url"));
+//        articleDAO.insertArticle(new Article("Title", "Content", "imageUrl", "jojo magazine", "04 avril 2123", "url"));
 //        List<Article> allArticles = articleDAO.findAllArticles();
 
         listView = (ListView) findViewById(R.id.listView);

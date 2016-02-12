@@ -23,6 +23,8 @@ public class ArticleDAO {
             AppDatabaseEntry.DATABASE_COLUMN_CONTENT,
             AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL,
             AppDatabaseEntry.DATABASE_COLUMN_URL,
+            AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER,
+            AppDatabaseEntry.DATABASE_COLUMN_DATE,
             AppDatabaseEntry.DATABASE_COLUMN_DELETED};
 
     public ArticleDAO(Context context) {
@@ -37,6 +39,8 @@ public class ArticleDAO {
         values.put(AppDatabaseEntry.DATABASE_COLUMN_CONTENT, article.getContent());
         values.put(AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL, article.getImageUrl());
         values.put(AppDatabaseEntry.DATABASE_COLUMN_URL, article.getUrl());
+        values.put(AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER, article.getPublisher());
+        values.put(AppDatabaseEntry.DATABASE_COLUMN_DATE, article.getDate());
         values.put(AppDatabaseEntry.DATABASE_COLUMN_DELETED, 0);
 
         return dbInstance.insert(AppDatabaseEntry.DATABASE_ARTICLE_TABLE, null, values);
@@ -52,6 +56,8 @@ public class ArticleDAO {
                         cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_CONTENT)),
                         cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL)),
                         cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_URL)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DATE)),
                         cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DELETED))));
             }while(cursor.moveToNext());
         }

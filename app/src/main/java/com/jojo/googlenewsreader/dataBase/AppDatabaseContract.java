@@ -19,8 +19,10 @@ public class AppDatabaseContract {
         public static final String DATABASE_COLUMN_IMAGE_URL = "imageUrl";
         public static final String DATABASE_COLUMN_URL = "url";
         public static final String DATABASE_COLUMN_DELETED = "deleted";
+        public static final String DATABASE_COLUMN_PUBLISHER = "publisher";
+        public static final String DATABASE_COLUMN_DATE = "publication_date";
 
-        public static final int DATABASE_VERSION = 2;
+        public static final int DATABASE_VERSION = 3;
 
         public static final String INIT_DB_TABLES = "CREATE TABLE IF NOT EXISTS " + DATABASE_ARTICLE_TABLE + "(" +
                 DATABASE_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
@@ -28,6 +30,8 @@ public class AppDatabaseContract {
                 DATABASE_COLUMN_CONTENT + " VARCHAR," +
                 DATABASE_COLUMN_IMAGE_URL + " VARCHAR," +
                 DATABASE_COLUMN_URL + " VARCHAR," +
+                DATABASE_COLUMN_PUBLISHER + " VARCHAR," +
+                DATABASE_COLUMN_DATE + " VARCHAR," +
                 DATABASE_COLUMN_DELETED + " BOOLEAN);";
 
         public static final String DELETE_DB_TABLES = "DROP TABLE IF EXISTS " + DATABASE_ARTICLE_TABLE;

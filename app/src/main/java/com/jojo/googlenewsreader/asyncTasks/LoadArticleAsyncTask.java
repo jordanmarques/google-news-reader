@@ -82,7 +82,9 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, Void> {
                 articles.add(new Article(jsonString.getJSONObject(i).getString("title"),
                         jsonString.getJSONObject(i).getString("content"),
                         jsonString.getJSONObject(i).getJSONObject("image").getString("url"),
-                        jsonString.getJSONObject(i).getString("url")));
+                        jsonString.getJSONObject(i).getString("url"),
+                        jsonString.getJSONObject(i).getString("publisher"),
+                        jsonString.getJSONObject(i).getString("publishedDate")));
 
                 listTitles[i] = jsonString.getJSONObject(i).getString("title");
             }

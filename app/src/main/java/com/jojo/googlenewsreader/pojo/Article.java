@@ -11,6 +11,8 @@ public class Article implements Serializable {
     private String content;
     private String imageUrl;
     private String url;
+    private String publisher;
+    private String date;
     private int deleted;
 
     public Article() {
@@ -23,12 +25,32 @@ public class Article implements Serializable {
         this.url = url;
     }
 
+    public Article(String title, String content, String imageUrl, String url, String publisher, String date) {
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.url = url;
+        this.publisher = publisher;
+        this.date = date;
+    }
+
     public Article(int id, String title, String content, String imageUrl, String url, int deleted) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
         this.url = url;
+        this.deleted = deleted;
+    }
+
+    public Article(int id, String title, String content, String imageUrl, String url, String publisher, String date, int deleted) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.url = url;
+        this.publisher = publisher;
+        this.date = date;
         this.deleted = deleted;
     }
 
@@ -67,6 +89,20 @@ public class Article implements Serializable {
         this.id = id;
     }
 
+    public String getPublisher() {
+        return publisher;
+    }
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public String getDate() {
+        return date;
+    }
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public int getDeleted() {
         return deleted;
     }
@@ -74,32 +110,6 @@ public class Article implements Serializable {
         this.deleted = deleted;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Article article = (Article) o;
 
-        if (id != article.id) return false;
-        if (deleted != article.deleted) return false;
-        if (title != null ? !title.equals(article.title) : article.title != null) return false;
-        if (content != null ? !content.equals(article.content) : article.content != null)
-            return false;
-        if (imageUrl != null ? !imageUrl.equals(article.imageUrl) : article.imageUrl != null)
-            return false;
-        return !(url != null ? !url.equals(article.url) : article.url != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
-        result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + deleted;
-        return result;
-    }
 }

@@ -25,6 +25,9 @@ public class ArticleDetail extends AppCompatActivity {
 
         TextView title = (TextView)findViewById(R.id.title);
         TextView description = (TextView)findViewById(R.id.description);
+        TextView publisher = (TextView)findViewById(R.id.textView2);
+        TextView date = (TextView)findViewById(R.id.textView3);
+
 
         if(Html.fromHtml(article.getTitle()).length() > 55){
             article.setTitle(Html.fromHtml(article.getTitle()).subSequence(0,50) + "...");
@@ -32,6 +35,8 @@ public class ArticleDetail extends AppCompatActivity {
 
         title.setText(Html.fromHtml(article.getTitle()));
         description.setText(Html.fromHtml(article.getContent()));
+        publisher.setText(Html.fromHtml(article.getPublisher()));
+        date.setText(Html.fromHtml(article.getDate()));
 
 
         Button webViewButton = (Button) findViewById(R.id.openWebView);
