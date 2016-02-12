@@ -5,11 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
 import com.jojo.googlenewsreader.R;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
