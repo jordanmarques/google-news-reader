@@ -2,12 +2,8 @@ package com.jojo.googlenewsreader.asyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.text.Html;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.activities.MainActivity;
@@ -31,7 +27,7 @@ import org.json.JSONObject;
 
 public class LoadArticleAsyncTask extends AsyncTask<Void, Void, Void> {
 
-    private static final String APIUrl = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=";
+    private static final String API_URL = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=";
     
     private String query;
     private Context context;
@@ -65,8 +61,21 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
         }
 
+        articleList = searchFromQuery(API_URL + query);
+
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void result) {
+        MainActivity.setArticleList(articleList);
+        ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(context, R.layout.article_line, articleList.getArticles());
+        listView.setAdapter(arrayAdapter);
+    }
+
+    private ArticleList searchFromQuery(String query) {
         try {
-            JSONArray jsonString = getJsonFromServer(APIUrl+query);
+            JSONArray jsonString = getJsonFromServer(query);
             String[] listTitles = new String[jsonString.length()];
             List<Article> articles = new ArrayList<>();
             for(int i = 0; i<jsonString.length(); i++) {
@@ -77,19 +86,12 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, Void> {
 
                 listTitles[i] = jsonString.getJSONObject(i).getString("title");
             }
-            articleList = new ArticleList(listTitles, articles);
+            return new ArticleList(listTitles, articles);
         }
         catch (IOException | JSONException error) {
             error.printStackTrace();
         }
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void result) {
-        MainActivity.setArticleList(articleList);
-        ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(context, R.layout.article_line, articleList.getArticles());
-        listView.setAdapter(arrayAdapter);
+        return new ArticleList();
     }
 
     public static JSONArray getJsonFromServer(String url) throws IOException {
