@@ -11,11 +11,14 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.asyncTasks.LoadArticleAsyncTask;
 import com.jojo.googlenewsreader.articles.ArticleList;
+import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
+import com.jojo.googlenewsreader.pojo.Article;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+//        Test DAO
+//        ArticleDAO articleDAO = new ArticleDAO(this);
+//        articleDAO.insertArticle(new Article("Title", "Content", "imageUrl", "url"));
+//        List<Article> allArticles = articleDAO.findAllArticles();
 
         listView = (ListView) findViewById(R.id.listView);
         SearchView searchView = (SearchView)findViewById(R.id.searchView);
