@@ -47,8 +47,7 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPreExecute() {
-        articleList = new ArticleList(new String[]{"Chargement en cours ..."}, new ArrayList());
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, android.R.id.text1, articleList.getListTitles());
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, android.R.id.text1, new String[]{"Chargement en cours ..."});
         listView.setAdapter(adapter);
     }
 
@@ -85,10 +84,8 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, Void> {
                         jsonString.getJSONObject(i).getString("url"),
                         jsonString.getJSONObject(i).getString("publisher"),
                         jsonString.getJSONObject(i).getString("publishedDate")));
-
-                listTitles[i] = jsonString.getJSONObject(i).getString("title");
             }
-            return new ArticleList(listTitles, articles);
+            return new ArticleList(articles);
         }
         catch (IOException | JSONException error) {
             error.printStackTrace();
