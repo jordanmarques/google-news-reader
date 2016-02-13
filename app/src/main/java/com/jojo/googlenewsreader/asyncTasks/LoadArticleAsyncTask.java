@@ -86,9 +86,11 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
                         jsonString.getJSONObject(i).getString("publishedDate"));
 
                 if(!articleDAO.isArticleInDB(article)){
-                    articleDAO.insertArticle(article);
+                    long articleId = articleDAO.insertArticle(article);
+                    articleList.add(articleDAO.findById(articleId));
+                } else {
+                    articleList.add(articleDAO.findByTitleStrict(article));
                 }
-                articleList.add(article);
             }
             return articleList;
         }

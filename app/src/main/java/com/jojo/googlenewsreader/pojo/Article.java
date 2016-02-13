@@ -126,4 +126,17 @@ public class Article implements Serializable {
         result = 31 * result + deleted;
         return result;
     }
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", url='" + url + '\'' +
+                ", publisher='" + publisher + '\'' +
+                ", date='" + date + '\'' +
+                ", deleted=" + deleted +
+                '}';
+    }
 }

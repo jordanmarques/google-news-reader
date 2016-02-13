@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.View;
@@ -41,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 //        Test DAO
-//        articleDAO.insertArticle(new Article("Title", "Content", "imageUrl", "jojo magazine", "04 avril 2123", "url"));
         articleDAO.findAllArticles();
+        articleDAO.findById(3);
 
         listView = (ListView) findViewById(R.id.listView);
         SearchView searchView = (SearchView)findViewById(R.id.searchView);
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 int itemPosition = position;
 
                 Intent intent = new Intent(MainActivity.this, ArticleDetail.class);
+                Log.d("MainActivity", articleList.get(itemPosition).toString());
                 intent.putExtra("articleForDetailActivity", articleList.get(itemPosition));
                 startActivityForResult(intent, 0);
             }

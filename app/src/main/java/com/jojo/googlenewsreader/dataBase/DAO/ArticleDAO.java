@@ -88,6 +88,34 @@ public class ArticleDAO {
         return cursor.moveToFirst();
     }
 
+    public Article findByTitleStrict(Article article){
+        String[] title = {String.valueOf(article.getTitle())};
+
+        Cursor cursor = dbInstance.query(
+                AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
+                PROJECTION_ARTICLE_TABLE,
+                AppDatabaseEntry.DATABASE_COLUMN_TITLE + "=?",
+                title,
+                null,
+                null,
+                null);
+
+        if(cursor.moveToFirst()){
+            article = new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_TITLE)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_CONTENT)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_URL)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DATE)),
+                    cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DELETED)));
+        }
+        cursor.close();
+
+        return article;
+
+    }
+
     public List<Article> findByTitle(String query) {
         List<Article> articles = new ArrayList<>();
         query = "%" + query + "%";
@@ -118,5 +146,31 @@ public class ArticleDAO {
         }
         cursor.close();
         return articles;
+    }
+
+    public Article findById(long id){
+
+        Article article = new Article();
+        Cursor cursor = dbInstance.query(AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
+                PROJECTION_ARTICLE_TABLE,
+                AppDatabaseEntry.DATABASE_COLUMN_ID +"=?",
+                new String[]{String.valueOf(id)},
+                null,
+                null,
+                null);
+
+        if(cursor.moveToFirst()){
+            article = new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_TITLE)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_CONTENT)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_URL)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DATE)),
+                    cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DELETED)));
+        }
+        cursor.close();
+
+        return article;
     }
 }
