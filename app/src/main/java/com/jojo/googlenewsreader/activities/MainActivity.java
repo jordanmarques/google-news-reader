@@ -14,8 +14,6 @@ import android.widget.SearchView;
 
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.asyncTasks.LoadArticleAsyncTask;
-import com.jojo.googlenewsreader.articles.ArticleList;
-import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
 import com.jojo.googlenewsreader.pojo.Article;
 
 import java.util.List;
@@ -24,7 +22,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
-    public static ArticleList articleList;
+    public static List<Article> articleList;
     public static String currentQuery = "";
 
     @Override
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 int itemPosition = position;
 
                 Intent intent = new Intent(MainActivity.this, ArticleDetail.class);
-                intent.putExtra("articleForDetailActivity", articleList.getArticles().get(itemPosition));
+                intent.putExtra("articleForDetailActivity", articleList.get(itemPosition));
                 startActivityForResult(intent, 0);
             }
         });
@@ -101,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void setArticleList(ArticleList articleList) {
+    public static void setArticleList(List articleList) {
         MainActivity.articleList = articleList;
     }
 

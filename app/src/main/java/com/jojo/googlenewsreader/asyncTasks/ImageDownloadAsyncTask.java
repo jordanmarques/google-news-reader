@@ -19,8 +19,13 @@ public class ImageDownloadAsyncTask extends AsyncTask<Void, Bitmap, Bitmap> {
     @Override
     protected Bitmap doInBackground(Void... params) {
         try {
+            if(url.isEmpty() || null == url){
+                return null;
+            }
+
             URL newurl = new URL(url);
             return BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+
         } catch (Exception e) {
             e.printStackTrace();
         }

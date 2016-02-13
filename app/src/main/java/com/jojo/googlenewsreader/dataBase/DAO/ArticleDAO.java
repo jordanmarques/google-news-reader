@@ -48,7 +48,14 @@ public class ArticleDAO {
 
     public List<Article> findAllArticles(){
         List<Article> articles = new ArrayList<>();
-        Cursor cursor = dbInstance.query(AppDatabaseEntry.DATABASE_ARTICLE_TABLE, PROJECTION_ARTICLE_TABLE, null, null, null, null, null);
+        Cursor cursor = dbInstance.query(AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
+                PROJECTION_ARTICLE_TABLE,
+                null,
+                null,
+                null,
+                null,
+                null);
+
         if(cursor.moveToFirst()){
             do{
                 articles.add(new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_ID)),
@@ -63,5 +70,18 @@ public class ArticleDAO {
         }
         cursor.close();
         return articles;
+    }
+
+    public Boolean isArticleInDB(Article article){
+
+        Cursor cursor = dbInstance.query(AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
+                PROJECTION_ARTICLE_TABLE,
+                AppDatabaseEntry.DATABASE_COLUMN_TITLE,
+                new String[]{article.getTitle()},
+                null,
+                null,
+                null);
+
+        return cursor.moveToFirst();
     }
 }
