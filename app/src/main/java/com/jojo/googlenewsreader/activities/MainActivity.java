@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.jojo.googlenewsreader.R;
-import com.jojo.googlenewsreader.articles.ArticleArrayAdapter;
+import com.jojo.googlenewsreader.arrayAdapter.ArticleArrayAdapter;
 import com.jojo.googlenewsreader.asyncTasks.LoadArticleAsyncTask;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
 import com.jojo.googlenewsreader.pojo.Article;
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
                     ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(MainActivity.this, R.layout.article_line, articleList);
                     getListView().setAdapter(arrayAdapter);
-                    
+
                     return false;
                 }
             });

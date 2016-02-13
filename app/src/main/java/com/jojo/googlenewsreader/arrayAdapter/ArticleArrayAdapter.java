@@ -1,4 +1,4 @@
-package com.jojo.googlenewsreader.articles;
+package com.jojo.googlenewsreader.arrayAdapter;
 
 import android.content.Context;
 import android.text.Html;

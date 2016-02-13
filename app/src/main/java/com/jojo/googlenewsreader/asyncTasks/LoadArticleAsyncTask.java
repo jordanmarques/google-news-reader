@@ -7,7 +7,7 @@ import android.widget.ListView;
 
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.activities.MainActivity;
-import com.jojo.googlenewsreader.articles.ArticleArrayAdapter;
+import com.jojo.googlenewsreader.arrayAdapter.ArticleArrayAdapter;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
 import com.jojo.googlenewsreader.pojo.Article;
 
