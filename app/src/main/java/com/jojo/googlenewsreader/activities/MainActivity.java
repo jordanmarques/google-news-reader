@@ -51,11 +51,13 @@ public class MainActivity extends AppCompatActivity {
         Button refreshButton = (Button) findViewById(R.id.button2);
         registerForContextMenu(listView);
 
+        search(LoadArticleAsyncTask.DEFAULT_RESEARCH);
+
         refreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 String currentQuery = MainActivity.getCurrentQuery();
-                if(!currentQuery.trim().equals("")){
+                if (!currentQuery.trim().equals("")) {
                     search(currentQuery);
                 }
             }

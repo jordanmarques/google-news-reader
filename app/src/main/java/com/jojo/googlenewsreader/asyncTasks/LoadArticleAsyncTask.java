@@ -27,8 +27,11 @@ import org.json.JSONObject;
 
 public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
 
+    public static final String DEFAULT_RESEARCH = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=''";
+
     private static final String API_URL = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=";
-    
+    private static final String DEFAULT_RESEARCH_ARGUMENT = "";
+
     private String query;
     private Context context;
     private ListView listView;
@@ -53,13 +56,20 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
     @Override
     protected List<Article> doInBackground(Void... params) {
 
+        List<Article> articles = new ArrayList<>();
         try {
-            query = URLEncoder.encode(query, "UTF-8");
+            if(!query.equals(DEFAULT_RESEARCH_ARGUMENT)){
+                articles = searchFromQuery(DEFAULT_RESEARCH);
+            } else {
+                query = URLEncoder.encode(query, "UTF-8");
+                articles = searchFromQuery(API_URL + query);
+            }
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        return searchFromQuery(API_URL + query);
+        return articles;
     }
 
     @Override
