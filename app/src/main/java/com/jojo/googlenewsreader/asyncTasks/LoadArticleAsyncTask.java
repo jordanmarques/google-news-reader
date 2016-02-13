@@ -8,6 +8,7 @@ import android.widget.ListView;
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.activities.MainActivity;
 import com.jojo.googlenewsreader.articles.ArticleArrayAdapter;
+import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
 import com.jojo.googlenewsreader.pojo.Article;
 
 import java.io.BufferedReader;
@@ -70,17 +71,26 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
 
     private List<Article> searchFromQuery(String query) {
         try {
+
             JSONArray jsonString = getJsonFromServer(query);
-            List<Article> articles = new ArrayList<>();
+            List<Article> articleList = new ArrayList<>();
+            ArticleDAO  articleDAO = new ArticleDAO(context);
+
             for(int i = 0; i<jsonString.length(); i++) {
-                articles.add(new Article(jsonString.getJSONObject(i).getString("title"),
+
+               Article article = new Article(jsonString.getJSONObject(i).getString("title"),
                         jsonString.getJSONObject(i).getString("content"),
                         jsonString.getJSONObject(i).getJSONObject("image").getString("url"),
                         jsonString.getJSONObject(i).getString("url"),
                         jsonString.getJSONObject(i).getString("publisher"),
-                        jsonString.getJSONObject(i).getString("publishedDate")));
+                        jsonString.getJSONObject(i).getString("publishedDate"));
+
+                if(!articleDAO.isArticleInDB(article)){
+                    articleDAO.insertArticle(article);
+                }
+                articleList.add(article);
             }
-            return articles;
+            return articleList;
         }
         catch (IOException | JSONException error) {
             error.printStackTrace();

@@ -74,10 +74,13 @@ public class ArticleDAO {
 
     public Boolean isArticleInDB(Article article){
 
-        Cursor cursor = dbInstance.query(AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
+        String[] title = {String.valueOf(article.getTitle())};
+
+        Cursor cursor = dbInstance.query(
+                AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
                 PROJECTION_ARTICLE_TABLE,
-                AppDatabaseEntry.DATABASE_COLUMN_TITLE,
-                new String[]{article.getTitle()},
+                AppDatabaseEntry.DATABASE_COLUMN_TITLE + "=?",
+                title,
                 null,
                 null,
                 null);

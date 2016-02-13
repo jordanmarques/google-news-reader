@@ -14,6 +14,7 @@ import android.widget.SearchView;
 
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.asyncTasks.LoadArticleAsyncTask;
+import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
 import com.jojo.googlenewsreader.pojo.Article;
 
 import java.util.List;
@@ -31,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
 //        Test DAO
-//        ArticleDAO articleDAO = new ArticleDAO(this);
+        ArticleDAO articleDAO = new ArticleDAO(this);
 //        articleDAO.insertArticle(new Article("Title", "Content", "imageUrl", "jojo magazine", "04 avril 2123", "url"));
-//        List<Article> allArticles = articleDAO.findAllArticles();
+        List<Article> allArticles = articleDAO.findAllArticles();
 
         listView = (ListView) findViewById(R.id.listView);
         SearchView searchView = (SearchView)findViewById(R.id.searchView);
