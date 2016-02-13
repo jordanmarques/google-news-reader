@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static List<Article> articleList;
     public static String currentQuery = "";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,10 +115,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId()==R.id.listView) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+
+            ListView listView = (ListView) v;
+            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            final Article article = (Article) listView.getItemAtPosition(acmi.position);
+
             menu.setHeaderTitle("Options");
-            menu.add(Menu.NONE,2 ,2, "Supprimer");
-            menu.add(Menu.NONE,3 ,3, "Ajouter Tag");
+            menu.add(Menu.NONE,2 ,2, "Supprimer").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    articleDAO.deleteArticle(article);
+                    articleList.remove(article);
+
+                    ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(MainActivity.this, R.layout.article_line, articleList);
+                    getListView().setAdapter(arrayAdapter);
+                    
+                    return false;
+                }
+            });
+            menu.add(Menu.NONE,3 ,3, "Ajouter Tag").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    return false;
+                }
+            });
         }
     }
 
@@ -151,5 +171,12 @@ public class MainActivity extends AppCompatActivity {
     }
     public static String getCurrentQuery(){
         return MainActivity.currentQuery;
+    }
+
+    public ListView getListView() {
+        return listView;
+    }
+    public void setListView(ListView listView) {
+        this.listView = listView;
     }
 }

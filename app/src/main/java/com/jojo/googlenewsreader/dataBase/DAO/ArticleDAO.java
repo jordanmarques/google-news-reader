@@ -72,22 +72,6 @@ public class ArticleDAO {
         return articles;
     }
 
-    public Boolean isArticleInDB(Article article){
-
-        String[] title = {String.valueOf(article.getTitle())};
-
-        Cursor cursor = dbInstance.query(
-                AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
-                PROJECTION_ARTICLE_TABLE,
-                AppDatabaseEntry.DATABASE_COLUMN_TITLE + "=?",
-                title,
-                null,
-                null,
-                null);
-
-        return cursor.moveToFirst();
-    }
-
     public Article findByTitleStrict(Article article){
         String[] title = {String.valueOf(article.getTitle())};
 
@@ -121,16 +105,16 @@ public class ArticleDAO {
         query = "%" + query + "%";
         String[] title = {query};
 
-        Cursor cursor = dbInstance.rawQuery( "SELECT " + AppDatabaseEntry.DATABASE_COLUMN_ID + "," +
-                        AppDatabaseEntry.DATABASE_COLUMN_TITLE + "," +
-                        AppDatabaseEntry.DATABASE_COLUMN_CONTENT + "," +
-                        AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL + "," +
-                        AppDatabaseEntry.DATABASE_COLUMN_URL + "," +
-                        AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER +","+
-                        AppDatabaseEntry.DATABASE_COLUMN_DATE + "," +
-                        AppDatabaseEntry.DATABASE_COLUMN_DELETED +
-                        " FROM " + AppDatabaseEntry.DATABASE_ARTICLE_TABLE +
-                        " WHERE " + AppDatabaseEntry.DATABASE_COLUMN_TITLE + " LIKE ?", title);
+        Cursor cursor = dbInstance.rawQuery("SELECT " + AppDatabaseEntry.DATABASE_COLUMN_ID + "," +
+                AppDatabaseEntry.DATABASE_COLUMN_TITLE + "," +
+                AppDatabaseEntry.DATABASE_COLUMN_CONTENT + "," +
+                AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL + "," +
+                AppDatabaseEntry.DATABASE_COLUMN_URL + "," +
+                AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER + "," +
+                AppDatabaseEntry.DATABASE_COLUMN_DATE + "," +
+                AppDatabaseEntry.DATABASE_COLUMN_DELETED +
+                " FROM " + AppDatabaseEntry.DATABASE_ARTICLE_TABLE +
+                " WHERE " + AppDatabaseEntry.DATABASE_COLUMN_TITLE + " LIKE ?", title);
 
         if(cursor.moveToFirst()){
             do{
@@ -153,7 +137,7 @@ public class ArticleDAO {
         Article article = new Article();
         Cursor cursor = dbInstance.query(AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
                 PROJECTION_ARTICLE_TABLE,
-                AppDatabaseEntry.DATABASE_COLUMN_ID +"=?",
+                AppDatabaseEntry.DATABASE_COLUMN_ID + "=?",
                 new String[]{String.valueOf(id)},
                 null,
                 null,
@@ -172,5 +156,28 @@ public class ArticleDAO {
         cursor.close();
 
         return article;
+    }
+
+    public void deleteArticle(Article article){
+
+        String selection = AppDatabaseEntry.DATABASE_COLUMN_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(article.getId()) };
+        dbInstance.delete(AppDatabaseEntry.DATABASE_ARTICLE_TABLE, selection, selectionArgs);
+    }
+
+    public Boolean isArticleInDB(Article article){
+
+        String[] title = {String.valueOf(article.getTitle())};
+
+        Cursor cursor = dbInstance.query(
+                AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
+                PROJECTION_ARTICLE_TABLE,
+                AppDatabaseEntry.DATABASE_COLUMN_TITLE + "=?",
+                title,
+                null,
+                null,
+                null);
+
+        return cursor.moveToFirst();
     }
 }
