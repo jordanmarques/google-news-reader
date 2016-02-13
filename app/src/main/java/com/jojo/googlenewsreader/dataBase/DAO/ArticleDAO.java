@@ -87,4 +87,36 @@ public class ArticleDAO {
 
         return cursor.moveToFirst();
     }
+
+    public List<Article> findByTitle(String query) {
+        List<Article> articles = new ArrayList<>();
+        query = "%" + query + "%";
+        String[] title = {query};
+
+        Cursor cursor = dbInstance.rawQuery( "SELECT " + AppDatabaseEntry.DATABASE_COLUMN_ID + "," +
+                        AppDatabaseEntry.DATABASE_COLUMN_TITLE + "," +
+                        AppDatabaseEntry.DATABASE_COLUMN_CONTENT + "," +
+                        AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL + "," +
+                        AppDatabaseEntry.DATABASE_COLUMN_URL + "," +
+                        AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER +","+
+                        AppDatabaseEntry.DATABASE_COLUMN_DATE + "," +
+                        AppDatabaseEntry.DATABASE_COLUMN_DELETED +
+                        " FROM " + AppDatabaseEntry.DATABASE_ARTICLE_TABLE +
+                        " WHERE " + AppDatabaseEntry.DATABASE_COLUMN_TITLE + " LIKE ?", title);
+
+        if(cursor.moveToFirst()){
+            do{
+                articles.add(new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_ID)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_TITLE)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_CONTENT)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_URL)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DATE)),
+                        cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DELETED))));
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        return articles;
+    }
 }

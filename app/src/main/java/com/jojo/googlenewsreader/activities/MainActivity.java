@@ -1,6 +1,9 @@
 package com.jojo.googlenewsreader.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -13,6 +16,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.jojo.googlenewsreader.R;
+import com.jojo.googlenewsreader.articles.ArticleArrayAdapter;
 import com.jojo.googlenewsreader.asyncTasks.LoadArticleAsyncTask;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
 import com.jojo.googlenewsreader.pojo.Article;
@@ -23,18 +27,22 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
+    private ArticleDAO articleDAO;
+
     public static List<Article> articleList;
     public static String currentQuery = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        articleDAO = new ArticleDAO(this);
+
 
 //        Test DAO
-        ArticleDAO articleDAO = new ArticleDAO(this);
 //        articleDAO.insertArticle(new Article("Title", "Content", "imageUrl", "jojo magazine", "04 avril 2123", "url"));
-        List<Article> allArticles = articleDAO.findAllArticles();
+        articleDAO.findAllArticles();
 
         listView = (ListView) findViewById(R.id.listView);
         SearchView searchView = (SearchView)findViewById(R.id.searchView);
@@ -47,8 +55,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String currentQuery = MainActivity.getCurrentQuery();
                 if(!currentQuery.trim().equals("")){
-                    LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, currentQuery);
-                    task.execute();
+                    search(currentQuery);
                 }
             }
         });
@@ -77,8 +84,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, query);
-                task.execute();
+                search(query);
                 MainActivity.setCurrentQuery(query);
                 return false;
             }
@@ -98,6 +104,28 @@ public class MainActivity extends AppCompatActivity {
             menu.add(Menu.NONE,2 ,2, "Supprimer");
             menu.add(Menu.NONE,3 ,3, "Ajouter Tag");
         }
+    }
+
+    private void search(String query) {
+
+        //si pas de reseau on fait une recherche dans la db et on donne le resultat a article array adapter
+        if(isNetworkAvailable()){
+            LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, query);
+            task.execute();
+        } else {
+            List<Article> result = articleDAO.findByTitle(query);
+            MainActivity.setArticleList(result);
+            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, result);
+            listView.setAdapter(arrayAdapter);
+        }
+
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public static void setArticleList(List articleList) {
