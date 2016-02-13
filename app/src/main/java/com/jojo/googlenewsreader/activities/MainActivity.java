@@ -46,12 +46,16 @@ public class MainActivity extends AppCompatActivity {
         articleDAO.findById(3);
 
         listView = (ListView) findViewById(R.id.listView);
+        registerForContextMenu(listView);
+
         SearchView searchView = (SearchView)findViewById(R.id.searchView);
         Button tagButton = (Button) findViewById(R.id.button);
         Button refreshButton = (Button) findViewById(R.id.button2);
-        registerForContextMenu(listView);
+        Button lastNewsButton = (Button) findViewById(R.id.button3);
+
 
         search(LoadArticleAsyncTask.DEFAULT_RESEARCH);
+        setCurrentQuery(LoadArticleAsyncTask.DEFAULT_RESEARCH);
 
         refreshButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -60,6 +64,14 @@ public class MainActivity extends AppCompatActivity {
                 if (!currentQuery.trim().equals("")) {
                     search(currentQuery);
                 }
+            }
+        });
+
+        lastNewsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search(LoadArticleAsyncTask.DEFAULT_RESEARCH);
+                setCurrentQuery(LoadArticleAsyncTask.DEFAULT_RESEARCH);
             }
         });
 
@@ -87,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
+                Log.d("MainActivity", query);
                 search(query);
                 MainActivity.setCurrentQuery(query);
                 return false;
@@ -112,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void search(String query) {
 
-        //si pas de reseau on fait une recherche dans la db et on donne le resultat a article array adapter
         if(isNetworkAvailable()){
             LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, query);
             task.execute();
@@ -126,8 +137,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }

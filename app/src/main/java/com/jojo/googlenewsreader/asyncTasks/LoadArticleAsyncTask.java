@@ -30,7 +30,6 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
     public static final String DEFAULT_RESEARCH = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=''";
 
     private static final String API_URL = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=";
-    private static final String DEFAULT_RESEARCH_ARGUMENT = "";
 
     private String query;
     private Context context;
@@ -58,7 +57,7 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
 
         List<Article> articles = new ArrayList<>();
         try {
-            if(!query.equals(DEFAULT_RESEARCH_ARGUMENT)){
+            if(query.equals(DEFAULT_RESEARCH)){
                 articles = searchFromQuery(DEFAULT_RESEARCH);
             } else {
                 query = URLEncoder.encode(query, "UTF-8");
