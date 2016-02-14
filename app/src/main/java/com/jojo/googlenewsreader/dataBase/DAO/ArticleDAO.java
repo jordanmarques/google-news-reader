@@ -18,14 +18,14 @@ public class ArticleDAO {
     private SQLiteDatabase dbInstance;
 
     private final String[] PROJECTION_ARTICLE_TABLE = {
-            AppDatabaseEntry.DATABASE_COLUMN_ID,
-            AppDatabaseEntry.DATABASE_COLUMN_TITLE,
-            AppDatabaseEntry.DATABASE_COLUMN_CONTENT,
-            AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL,
-            AppDatabaseEntry.DATABASE_COLUMN_URL,
-            AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER,
-            AppDatabaseEntry.DATABASE_COLUMN_DATE,
-            AppDatabaseEntry.DATABASE_COLUMN_DELETED};
+            AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID,
+            AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE,
+            AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_CONTENT,
+            AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_IMAGE_URL,
+            AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_URL,
+            AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_PUBLISHER,
+            AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DATE,
+            AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED};
 
     public ArticleDAO(Context context) {
         db = new AppDataBase(context);
@@ -35,13 +35,13 @@ public class ArticleDAO {
     public long insertArticle(Article article){
         ContentValues values = new ContentValues();
 
-        values.put(AppDatabaseEntry.DATABASE_COLUMN_TITLE, article.getTitle());
-        values.put(AppDatabaseEntry.DATABASE_COLUMN_CONTENT, article.getContent());
-        values.put(AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL, article.getImageUrl());
-        values.put(AppDatabaseEntry.DATABASE_COLUMN_URL, article.getUrl());
-        values.put(AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER, article.getPublisher());
-        values.put(AppDatabaseEntry.DATABASE_COLUMN_DATE, article.getDate());
-        values.put(AppDatabaseEntry.DATABASE_COLUMN_DELETED, 0);
+        values.put(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE, article.getTitle());
+        values.put(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_CONTENT, article.getContent());
+        values.put(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_IMAGE_URL, article.getImageUrl());
+        values.put(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_URL, article.getUrl());
+        values.put(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_PUBLISHER, article.getPublisher());
+        values.put(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DATE, article.getDate());
+        values.put(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED, 0);
 
         return dbInstance.insert(AppDatabaseEntry.DATABASE_ARTICLE_TABLE, null, values);
     }
@@ -58,14 +58,14 @@ public class ArticleDAO {
 
         if(cursor.moveToFirst()){
             do{
-                articles.add(new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_ID)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_TITLE)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_CONTENT)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_URL)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DATE)),
-                        cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DELETED))));
+                articles.add(new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_CONTENT)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_IMAGE_URL)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_URL)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_PUBLISHER)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DATE)),
+                        cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED))));
             }while(cursor.moveToNext());
         }
         cursor.close();
@@ -78,21 +78,21 @@ public class ArticleDAO {
         Cursor cursor = dbInstance.query(
                 AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
                 PROJECTION_ARTICLE_TABLE,
-                AppDatabaseEntry.DATABASE_COLUMN_TITLE + "=?",
+                AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE + "=?",
                 title,
                 null,
                 null,
                 null);
 
         if(cursor.moveToFirst()){
-            article = new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_ID)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_TITLE)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_CONTENT)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_URL)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DATE)),
-                    cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DELETED)));
+            article = new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_CONTENT)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_IMAGE_URL)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_URL)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_PUBLISHER)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DATE)),
+                    cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED)));
         }
         cursor.close();
 
@@ -105,27 +105,27 @@ public class ArticleDAO {
         query = "%" + query + "%";
         String[] title = {query};
 
-        Cursor cursor = dbInstance.rawQuery("SELECT " + AppDatabaseEntry.DATABASE_COLUMN_ID + "," +
-                AppDatabaseEntry.DATABASE_COLUMN_TITLE + "," +
-                AppDatabaseEntry.DATABASE_COLUMN_CONTENT + "," +
-                AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL + "," +
-                AppDatabaseEntry.DATABASE_COLUMN_URL + "," +
-                AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER + "," +
-                AppDatabaseEntry.DATABASE_COLUMN_DATE + "," +
-                AppDatabaseEntry.DATABASE_COLUMN_DELETED +
+        Cursor cursor = dbInstance.rawQuery("SELECT " + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID + "," +
+                AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE + "," +
+                AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_CONTENT + "," +
+                AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_IMAGE_URL + "," +
+                AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_URL + "," +
+                AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_PUBLISHER + "," +
+                AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DATE + "," +
+                AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED +
                 " FROM " + AppDatabaseEntry.DATABASE_ARTICLE_TABLE +
-                " WHERE " + AppDatabaseEntry.DATABASE_COLUMN_TITLE + " LIKE ?", title);
+                " WHERE " + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE + " LIKE ?", title);
 
         if(cursor.moveToFirst()){
             do{
-                articles.add(new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_ID)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_TITLE)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_CONTENT)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_URL)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER)),
-                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DATE)),
-                        cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DELETED))));
+                articles.add(new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_CONTENT)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_IMAGE_URL)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_URL)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_PUBLISHER)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DATE)),
+                        cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED))));
             }while(cursor.moveToNext());
         }
         cursor.close();
@@ -137,21 +137,21 @@ public class ArticleDAO {
         Article article = new Article();
         Cursor cursor = dbInstance.query(AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
                 PROJECTION_ARTICLE_TABLE,
-                AppDatabaseEntry.DATABASE_COLUMN_ID + "=?",
+                AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID + "=?",
                 new String[]{String.valueOf(id)},
                 null,
                 null,
                 null);
 
         if(cursor.moveToFirst()){
-            article = new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_ID)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_TITLE)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_CONTENT)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_IMAGE_URL)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_URL)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_PUBLISHER)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DATE)),
-                    cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_COLUMN_DELETED)));
+            article = new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_CONTENT)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_IMAGE_URL)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_URL)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_PUBLISHER)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DATE)),
+                    cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED)));
         }
         cursor.close();
 
@@ -160,7 +160,7 @@ public class ArticleDAO {
 
     public void deleteArticle(Article article){
 
-        String selection = AppDatabaseEntry.DATABASE_COLUMN_ID + " LIKE ?";
+        String selection = AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID + " LIKE ?";
         String[] selectionArgs = { String.valueOf(article.getId()) };
         dbInstance.delete(AppDatabaseEntry.DATABASE_ARTICLE_TABLE, selection, selectionArgs);
     }
@@ -172,7 +172,7 @@ public class ArticleDAO {
         Cursor cursor = dbInstance.query(
                 AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
                 PROJECTION_ARTICLE_TABLE,
-                AppDatabaseEntry.DATABASE_COLUMN_TITLE + "=?",
+                AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE + "=?",
                 title,
                 null,
                 null,

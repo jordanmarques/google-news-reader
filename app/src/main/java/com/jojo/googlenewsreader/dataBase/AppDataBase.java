@@ -13,7 +13,8 @@ public class AppDataBase extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(AppDatabaseEntry.INIT_DB_TABLES);
+        db.execSQL(AppDatabaseEntry.CREATE_ARTICLE_TABLE);
+        db.execSQL(AppDatabaseEntry.CREATE_TAG_TABLE);
     }
 
     @Override
