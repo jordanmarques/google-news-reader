@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                     //empecher fermer context menungui
                     //http://stackoverflow.com/questions/13784088/setting-popupmenu-menu-items-programmatically
                     //http://stackoverflow.com/questions/21329132/android-custom-dropdown-popup-menu
-
+                    //http://stackoverflow.com/questions/8002756/sqlite-composite-key-2-foreign-keys-link-table
                     popup.getMenu().add(Menu.NONE, 1, 1, "TOTO");
 
                     TagDAO tagDAO = new TagDAO(MainActivity.this);
@@ -166,9 +166,7 @@ public class MainActivity extends AppCompatActivity {
                             return true;
                         }
                     });
-
                     popup.show();
-
                     return false;
                 }
             });
