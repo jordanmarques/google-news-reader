@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -16,12 +17,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.arrayAdapter.ArticleArrayAdapter;
 import com.jojo.googlenewsreader.asyncTasks.LoadArticleAsyncTask;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
+import com.jojo.googlenewsreader.dataBase.DAO.TagDAO;
 import com.jojo.googlenewsreader.pojo.Article;
+import com.jojo.googlenewsreader.pojo.Tag;
 
 import java.util.List;
 
@@ -110,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
     }
 
     @Override
@@ -121,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
             final Article article = (Article) listView.getItemAtPosition(acmi.position);
 
             menu.setHeaderTitle("Options");
+
             menu.add(Menu.NONE,2 ,2, "Supprimer").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
@@ -133,13 +140,40 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
             });
-            menu.add(Menu.NONE,3 ,3, "Ajouter Tag").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+            menu.add(Menu.NONE, 3, 3, "Ajouter Tag").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
+                    PopupMenu popup = new PopupMenu(MainActivity.this, findViewById(R.id.listView));
+
+                    //empecher fermer context menungui
+                    //http://stackoverflow.com/questions/13784088/setting-popupmenu-menu-items-programmatically
+                    //http://stackoverflow.com/questions/21329132/android-custom-dropdown-popup-menu
+
+                    popup.getMenu().add(Menu.NONE, 1, 1, "TOTO");
+
+                    TagDAO tagDAO = new TagDAO(MainActivity.this);
+                    List<Tag> allTags = tagDAO.findAllTags();
+                    for(Tag tag : allTags){
+                        popup.getMenu().add(1, 1, 1, tag.getLabel());
+                    }
+
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            //TODO: link between article and tag
+                            Toast.makeText(MainActivity.this, item.getTitle() + " " + article.getTitle(), Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                    });
+
+                    popup.show();
+
                     return false;
                 }
             });
         }
+
     }
 
     private void search(String query) {
