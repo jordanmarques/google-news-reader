@@ -23,12 +23,13 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Descritpion"
         android:id="@+id/description"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/title"
-        android:layout_alignStart="@+id/title"
-        android:layout_above="@+id/textView3"
-        android:paddingLeft="10dp" />
+        android:paddingLeft="10dp"
+        android:layout_alignRight="@+id/openWebView"
+        android:layout_alignEnd="@+id/openWebView"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/imageViewLandscape"
+        android:layout_toEndOf="@+id/imageViewLandscape"
+        android:layout_below="@+id/title" />
 
     <Button
         android:layout_width="wrap_content"

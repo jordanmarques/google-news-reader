@@ -89,10 +89,10 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO recupperer image
+
                 View child = listView.getChildAt(position);
 
-                ImageView imageView = (ImageView )findViewById(R.id.imageViewArticle);
+                ImageView imageView = (ImageView )child.findViewById(R.id.imageViewArticle);
                 imageView.buildDrawingCache();
 
 
