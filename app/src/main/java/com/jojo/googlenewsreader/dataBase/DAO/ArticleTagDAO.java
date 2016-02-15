@@ -55,9 +55,6 @@ public class ArticleTagDAO {
     }
 
     public void deleteArticleTagLink(Article article, Tag tag){
-//        String selection = AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID + " = ? AND " + AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID + " = ?";
-//        String[] selectionArgs = { String.valueOf(tag.getId()),  String.valueOf(article.getId())};
-//        dbInstance.delete(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE, selection, selectionArgs);
         String deleteLink = "DELETE FROM " + AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE+ " WHERE " + AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID + "=" + String.valueOf(article.getId()) + " AND " +
                 AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID + "=" + String.valueOf(tag.getId()) + ";";
         dbInstance.execSQL(deleteLink);
