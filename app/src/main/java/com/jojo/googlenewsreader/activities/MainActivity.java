@@ -32,6 +32,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String INIT_SEARCH = "init_search";
+
     private ListView listView;
     private ArticleDAO articleDAO;
 
@@ -57,9 +59,7 @@ public class MainActivity extends AppCompatActivity {
         Button refreshButton = (Button) findViewById(R.id.button2);
         Button lastNewsButton = (Button) findViewById(R.id.button3);
 
-
-        search(LoadArticleAsyncTask.DEFAULT_RESEARCH);
-        setCurrentQuery(LoadArticleAsyncTask.DEFAULT_RESEARCH);
+        search(INIT_SEARCH);
 
         refreshButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -74,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
         lastNewsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                search(LoadArticleAsyncTask.DEFAULT_RESEARCH);
-                setCurrentQuery(LoadArticleAsyncTask.DEFAULT_RESEARCH);
+                search(INIT_SEARCH);
             }
         });
 
@@ -103,12 +102,9 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d("MainActivity", query);
                 search(query);
-                MainActivity.setCurrentQuery(query);
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
@@ -156,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
                     TagDAO tagDAO = new TagDAO(MainActivity.this);
                     List<Tag> allTags = tagDAO.findAllTags();
-                    for(Tag tag : allTags){
+                    for (Tag tag : allTags) {
                         popup.getMenu().add(1, 1, 1, tag.getLabel());
                     }
 
@@ -179,15 +175,29 @@ public class MainActivity extends AppCompatActivity {
     private void search(String query) {
 
         if(isNetworkAvailable()){
-            LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, query);
-            task.execute();
+            if(query.equals(INIT_SEARCH)){
+                LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, LoadArticleAsyncTask.DEFAULT_RESEARCH);
+                task.execute();
+                setCurrentQuery(INIT_SEARCH);
+            } else {
+                LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, query);
+                task.execute();
+                setCurrentQuery(query);
+            }
         } else {
-            List<Article> result = articleDAO.findByTitle(query);
-            MainActivity.setArticleList(result);
-            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, result);
-            listView.setAdapter(arrayAdapter);
+            if(query.equals(INIT_SEARCH)){
+                List<Article> allArticles = articleDAO.findAllArticles();
+                ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, allArticles);
+                listView.setAdapter(arrayAdapter);
+                setCurrentQuery(INIT_SEARCH);
+            } else {
+                List<Article> result = articleDAO.findByTitle(query);
+                MainActivity.setArticleList(result);
+                ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, result);
+                listView.setAdapter(arrayAdapter);
+                setCurrentQuery(query);
+            }
         }
-
     }
 
     private boolean isNetworkAvailable() {
