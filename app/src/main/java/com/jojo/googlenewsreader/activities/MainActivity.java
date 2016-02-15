@@ -91,17 +91,18 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 View child = listView.getChildAt(position);
-
-                ImageView imageView = (ImageView )child.findViewById(R.id.imageViewArticle);
-                imageView.buildDrawingCache();
+                if(isNetworkAvailable()) {
+                    ImageView imageView = (ImageView) child.findViewById(R.id.imageViewArticle);
+                    imageView.buildDrawingCache();
+                    ArticleDetail.setImage(imageView.getDrawingCache());
+                }
 
 
                 Intent intent = new Intent(MainActivity.this, ArticleDetail.class);
-                Log.d("MainActivity", articleList.get(position).toString());
                 intent.putExtra("articleForDetailActivity", articleList.get(position));
 
                 startActivityForResult(intent, 0);
-                ArticleDetail.setImage(imageView.getDrawingCache());
+
             }
         });
 
@@ -185,22 +186,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void tagSearch(String query) {
-        List<Article> allArticles = articleDAO.findByTag(query.substring(1));
-        ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, allArticles);
+        articleList = articleDAO.findByTag(query.substring(1));
+        ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
         listView.setAdapter(arrayAdapter);
         setCurrentQuery(INIT_SEARCH);
     }
 
     private void localSearch(String query) {
         if(query.equals(INIT_SEARCH)){
-            List<Article> allArticles = articleDAO.findAllArticles();
-            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, allArticles);
+            articleList = articleDAO.findAllArticles();
+            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
             listView.setAdapter(arrayAdapter);
             setCurrentQuery(INIT_SEARCH);
         } else {
-            List<Article> result = articleDAO.findByTitle(query);
-            MainActivity.setArticleList(result);
-            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, result);
+            articleList = articleDAO.findByTitle(query);
+            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
             listView.setAdapter(arrayAdapter);
             setCurrentQuery(query);
         }
