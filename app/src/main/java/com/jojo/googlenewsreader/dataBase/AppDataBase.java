@@ -15,6 +15,7 @@ public class AppDataBase extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(AppDatabaseEntry.CREATE_ARTICLE_TABLE);
         db.execSQL(AppDatabaseEntry.CREATE_TAG_TABLE);
+        db.execSQL(AppDatabaseEntry.CREATE_ARTICLE_TAG_TABLE);
     }
 
     @Override

@@ -10,6 +10,7 @@ public class AppDatabaseContract {
     public static abstract class AppDatabaseEntry implements BaseColumns{
 
         public static final String DATABASE_NAME = "Google-news-reader-DB.db";
+        public static final int DATABASE_VERSION = 2;
 
         public static final String DATABASE_ARTICLE_TABLE = "Article";
         public static final String DATABASE_ARTICLE_COLUMN_ID = "id";
@@ -25,7 +26,9 @@ public class AppDatabaseContract {
         public static final String DATABASE_TAG_COLUMN_ID = "id";
         public static final String DATABASE_TAG_COLUMN_LABEL = "label";
 
-        public static final int DATABASE_VERSION = 2;
+        public static final String DATABASE_ARTICLE_TAG_TABLE = "article_tag";
+        public static final String DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID = "article_id";
+        public static final String DATABASE_ARTICLE_TAG_COLUMN_TAG_ID = "tag_id";
 
         public static final String CREATE_ARTICLE_TABLE = "CREATE TABLE IF NOT EXISTS " + DATABASE_ARTICLE_TABLE + "(" +
                 DATABASE_ARTICLE_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -41,7 +44,16 @@ public class AppDatabaseContract {
                 DATABASE_TAG_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 DATABASE_TAG_COLUMN_LABEL + " VARCHAR);";
 
+        public static final String CREATE_ARTICLE_TAG_TABLE = "CREATE TABLE IF NOT EXISTS " + DATABASE_ARTICLE_TAG_TABLE + "(" +
+                DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID + " NOT NULL, " +
+                DATABASE_ARTICLE_TAG_COLUMN_TAG_ID + " NOT NULL, " +
+                "FOREIGN KEY (" + DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID + ") REFERENCES " + DATABASE_ARTICLE_TABLE + "(" + DATABASE_ARTICLE_COLUMN_ID + ")," +
+                " FOREIGN KEY (" + DATABASE_ARTICLE_TAG_COLUMN_TAG_ID + ") REFERENCES " + DATABASE_TAG_TABLE + "(" + DATABASE_TAG_COLUMN_ID + ")," +
+                " PRIMARY KEY (" + DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID + "," + DATABASE_ARTICLE_TAG_COLUMN_TAG_ID +"));";
+
+
         public static final String DELETE_DB_TABLES = "DROP TABLE IF EXISTS " + DATABASE_ARTICLE_TABLE + ";" +
-                " DROP TABLE IF EXISTS " + DATABASE_TAG_TABLE + ";";
+                " DROP TABLE IF EXISTS " + DATABASE_TAG_TABLE + ";" +
+                " DROP TABLE IF EXISTS " + DATABASE_ARTICLE_TAG_TABLE + ";";
     }
 }

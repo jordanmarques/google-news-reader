@@ -3,7 +3,6 @@ package com.jojo.googlenewsreader.activities;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,10 +12,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.jojo.googlenewsreader.R;
-import com.jojo.googlenewsreader.arrayAdapter.ArticleArrayAdapter;
 import com.jojo.googlenewsreader.arrayAdapter.TagArrayAdapter;
+import com.jojo.googlenewsreader.dataBase.DAO.ArticleTagDAO;
 import com.jojo.googlenewsreader.dataBase.DAO.TagDAO;
 import com.jojo.googlenewsreader.pojo.Tag;
 
@@ -25,6 +25,7 @@ import java.util.List;
 public class TagManager extends AppCompatActivity {
 
     private TagDAO tagDAO;
+    private ArticleTagDAO articleTagDAO;
     private static List<Tag> allTags;
     private static TagArrayAdapter tagArrayAdapter;
 
@@ -38,6 +39,7 @@ public class TagManager extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.listView2);
         registerForContextMenu(listView);
 
+        articleTagDAO = new ArticleTagDAO(this);
         tagDAO = new TagDAO(this);
         allTags = tagDAO.findAllTags();
 
@@ -57,10 +59,6 @@ public class TagManager extends AppCompatActivity {
                 hideSoftKeyboard(TagManager.this);
             }
         });
-
-
-
-
     }
 
     @Override
@@ -75,13 +73,19 @@ public class TagManager extends AppCompatActivity {
             menu.add(Menu.NONE,1 ,1, "Supprimer").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    tagDAO.deleteTag(tag);
+                    deleteTag(tag);
                     getAllTags().remove(tag);
                     getTagArrayAdapter().notifyDataSetChanged();
+                    Toast.makeText(TagManager.this, "Tag supprimé ", Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
         }
+    }
+
+    public void deleteTag(Tag tag){
+        tagDAO.deleteTag(tag);
+        articleTagDAO.deleteArticleTagLink(tag);
     }
 
     public static void hideSoftKeyboard(Activity activity) {

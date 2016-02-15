@@ -23,6 +23,7 @@ import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.arrayAdapter.ArticleArrayAdapter;
 import com.jojo.googlenewsreader.asyncTasks.LoadArticleAsyncTask;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
+import com.jojo.googlenewsreader.dataBase.DAO.ArticleTagDAO;
 import com.jojo.googlenewsreader.dataBase.DAO.TagDAO;
 import com.jojo.googlenewsreader.pojo.Article;
 import com.jojo.googlenewsreader.pojo.Tag;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     private ArticleDAO articleDAO;
+    private ArticleTagDAO articleTagDAO;
 
     public static List<Article> articleList;
     public static String currentQuery = "";
@@ -45,11 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         articleDAO = new ArticleDAO(this);
-
-
-//        Test DAO
-        articleDAO.findAllArticles();
-        articleDAO.findById(3);
+        articleTagDAO = new ArticleTagDAO(this);
 
         listView = (ListView) findViewById(R.id.listView);
         registerForContextMenu(listView);
@@ -127,12 +125,13 @@ public class MainActivity extends AppCompatActivity {
             menu.add(Menu.NONE,2 ,2, "Supprimer").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    articleDAO.deleteArticle(article);
+                    deleteArticle(article);
                     articleList.remove(article);
 
                     ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(MainActivity.this, R.layout.article_line, articleList);
                     getListView().setAdapter(arrayAdapter);
 
+                    Toast.makeText(MainActivity.this, "Article supprimé ", Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
@@ -140,17 +139,9 @@ public class MainActivity extends AppCompatActivity {
             menu.add(Menu.NONE, 3, 3, "Ajouter Tag").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-
-                    //findViewById(R.id.listView)
                     PopupMenu popup = new PopupMenu(MainActivity.this, getViewByPosition(acmi.position, listView));
 
-                    //empecher fermer context menungui
-                    //http://stackoverflow.com/questions/13784088/setting-popupmenu-menu-items-programmatically
-                    //http://stackoverflow.com/questions/21329132/android-custom-dropdown-popup-menu
-                    //http://stackoverflow.com/questions/8002756/sqlite-composite-key-2-foreign-keys-link-table
-                    popup.getMenu().add(Menu.NONE, 1, 1, "TOTO");
-
-                    TagDAO tagDAO = new TagDAO(MainActivity.this);
+                    final TagDAO tagDAO = new TagDAO(MainActivity.this);
                     List<Tag> allTags = tagDAO.findAllTags();
                     for (Tag tag : allTags) {
                         popup.getMenu().add(1, 1, 1, tag.getLabel());
@@ -159,8 +150,9 @@ public class MainActivity extends AppCompatActivity {
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
-                            //TODO: link between article and tag
-                            Toast.makeText(MainActivity.this, item.getTitle() + " " + article.getTitle(), Toast.LENGTH_SHORT).show();
+                            Tag tag = tagDAO.findTagByTitle(String.valueOf(item.getTitle()));
+                            articleTagDAO.insertArticleTagLink(article, tag);
+                            Toast.makeText(MainActivity.this, "Article lié au Tag: " + tag.getLabel(), Toast.LENGTH_SHORT).show();
                             return true;
                         }
                     });
@@ -198,6 +190,11 @@ public class MainActivity extends AppCompatActivity {
                 setCurrentQuery(query);
             }
         }
+    }
+
+    public void deleteArticle(Article article){
+        articleDAO.deleteArticle(article);
+        articleTagDAO.deleteArticleTagLink(article);
     }
 
     private boolean isNetworkAvailable() {

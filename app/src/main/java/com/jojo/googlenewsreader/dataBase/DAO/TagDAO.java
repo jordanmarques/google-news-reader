@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.jojo.googlenewsreader.dataBase.AppDataBase;
 import com.jojo.googlenewsreader.dataBase.AppDatabaseContract;
+import com.jojo.googlenewsreader.pojo.Article;
 import com.jojo.googlenewsreader.pojo.Tag;
 
 import java.util.ArrayList;
@@ -78,5 +79,27 @@ public class TagDAO {
         values.put(AppDatabaseContract.AppDatabaseEntry.DATABASE_TAG_COLUMN_LABEL, tag.getLabel());
 
         return dbInstance.insert(AppDatabaseContract.AppDatabaseEntry.DATABASE_TAG_TABLE, null, values);
+    }
+
+    public Tag findTagByTitle(String tagTitle) {
+        Tag tag = new Tag();
+        String[] title = {String.valueOf(tagTitle)};
+
+        Cursor cursor = dbInstance.query(
+                AppDatabaseContract.AppDatabaseEntry.DATABASE_TAG_TABLE,
+                PROJECTION_TAG_TABLE,
+                AppDatabaseContract.AppDatabaseEntry.DATABASE_TAG_COLUMN_LABEL + "=?",
+                title,
+                null,
+                null,
+                null);
+
+        if(cursor.moveToFirst()){
+            tag = new Tag(cursor.getInt(cursor.getColumnIndex(AppDatabaseContract.AppDatabaseEntry.DATABASE_TAG_COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabaseContract.AppDatabaseEntry.DATABASE_TAG_COLUMN_LABEL)));
+        }
+        cursor.close();
+
+        return tag;
     }
 }
