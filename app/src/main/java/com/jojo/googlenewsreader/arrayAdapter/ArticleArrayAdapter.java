@@ -31,7 +31,7 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
 
         text.setText(Html.fromHtml(article.getTitle()));
 
-        ImageDownloadAsyncTask imageDownloadAsyncTask = new ImageDownloadAsyncTask(image, article.getImageUrl());
+        ImageDownloadAsyncTask imageDownloadAsyncTask = new ImageDownloadAsyncTask(image, article);
         imageDownloadAsyncTask.execute();
 
         return line;

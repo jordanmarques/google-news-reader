@@ -1,11 +1,13 @@
 package com.jojo.googlenewsreader.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jojo.googlenewsreader.R;
@@ -14,12 +16,22 @@ import com.jojo.googlenewsreader.pojo.Article;
 public class ArticleDetail extends AppCompatActivity {
 
     private Article article;
+
+    private static final int PORTRAIT = 1;
+
+    public static Bitmap image;
     public static String urlArticle;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_article_detail);
+        int orientation = this.getResources().getConfiguration().orientation;
+        if (orientation == PORTRAIT){
+            setContentView(R.layout.activity_article_detail);
+        }
+        else{
+            setContentView(R.layout.activity_article_detail_land);
+        }
 
         this.article = (Article) getIntent().getSerializableExtra("articleForDetailActivity");
 
@@ -27,16 +39,22 @@ public class ArticleDetail extends AppCompatActivity {
         TextView description = (TextView)findViewById(R.id.description);
         TextView publisher = (TextView)findViewById(R.id.textView2);
         TextView date = (TextView)findViewById(R.id.textView3);
+        ImageView imageViewLandscape = (ImageView)findViewById(R.id.imageViewLandscape);
 
 
         if(Html.fromHtml(article.getTitle()).length() > 55){
             article.setTitle(Html.fromHtml(article.getTitle()).subSequence(0,50) + "...");
         }
 
+
         title.setText(Html.fromHtml(article.getTitle()));
         description.setText(Html.fromHtml(article.getContent()));
         publisher.setText(Html.fromHtml(article.getPublisher()));
         date.setText(Html.fromHtml(article.getDate()));
+
+        if (orientation != PORTRAIT) {
+            imageViewLandscape.setImageBitmap(image);
+        }
 
 
         Button webViewButton = (Button) findViewById(R.id.openWebView);
@@ -55,5 +73,12 @@ public class ArticleDetail extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    public static Bitmap getImage() {
+        return image;
+    }
+    public static void setImage(Bitmap image) {
+        ArticleDetail.image = image;
     }
 }

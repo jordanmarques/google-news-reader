@@ -2,6 +2,7 @@ package com.jojo.googlenewsreader.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -87,12 +89,19 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int itemPosition = position;
+                //TODO recupperer image
+                View child = listView.getChildAt(position);
+
+                ImageView imageView = (ImageView )findViewById(R.id.imageViewArticle);
+                imageView.buildDrawingCache();
+
 
                 Intent intent = new Intent(MainActivity.this, ArticleDetail.class);
-                Log.d("MainActivity", articleList.get(itemPosition).toString());
-                intent.putExtra("articleForDetailActivity", articleList.get(itemPosition));
+                Log.d("MainActivity", articleList.get(position).toString());
+                intent.putExtra("articleForDetailActivity", articleList.get(position));
+
                 startActivityForResult(intent, 0);
+                ArticleDetail.setImage(imageView.getDrawingCache());
             }
         });
 
