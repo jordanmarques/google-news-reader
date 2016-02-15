@@ -3,6 +3,7 @@ package com.jojo.googlenewsreader.pojo;
 import android.text.Html;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Article implements Serializable {
 
@@ -14,6 +15,7 @@ public class Article implements Serializable {
     private String publisher;
     private String date;
     private int deleted;
+    private List<Tag> tagList;
 
     public Article() {
     }
@@ -92,5 +94,12 @@ public class Article implements Serializable {
     }
     public void setDeleted(int deleted) {
         this.deleted = deleted;
+    }
+
+    public List<Tag> getTagList() {
+        return tagList;
+    }
+    public void setTagList(List<Tag> tagList) {
+        this.tagList = tagList;
     }
 }

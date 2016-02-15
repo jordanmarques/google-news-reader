@@ -76,7 +76,7 @@ public class TagManager extends AppCompatActivity {
                     deleteTag(tag);
                     getAllTags().remove(tag);
                     getTagArrayAdapter().notifyDataSetChanged();
-                    Toast.makeText(TagManager.this, "Tag supprimé ", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(TagManager.this, "Tag supprimé ", Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });
