@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.jojo.googlenewsreader.dataBase.AppDataBase;
 import com.jojo.googlenewsreader.dataBase.AppDatabaseContract;
 import com.jojo.googlenewsreader.pojo.Article;
-import com.jojo.googlenewsreader.pojo.Article_Tag;
+import com.jojo.googlenewsreader.pojo.ArticleTag;
 import com.jojo.googlenewsreader.pojo.Tag;
 
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ public class ArticleTagDAO {
         dbInstance = db.getWritableDatabase();
     }
 
-    public List<Article_Tag> findAll(){
-        List<Article_Tag> article_tag = new ArrayList<>();
+    public List<ArticleTag> findAll(){
+        List<ArticleTag> article_tag = new ArrayList<>();
         Cursor cursor = dbInstance.query(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE,
                 new String[]{"*"},
                 null,
@@ -40,7 +40,7 @@ public class ArticleTagDAO {
 
         if(cursor.moveToFirst()){
             do{
-                article_tag.add(new Article_Tag(cursor.getInt(cursor.getColumnIndex(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID)),
+                article_tag.add(new ArticleTag(cursor.getInt(cursor.getColumnIndex(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID)),
                         cursor.getInt(cursor.getColumnIndex(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID))));
             }while(cursor.moveToNext());
         }

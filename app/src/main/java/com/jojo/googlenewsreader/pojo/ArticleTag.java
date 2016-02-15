@@ -2,17 +2,17 @@ package com.jojo.googlenewsreader.pojo;
 
 import java.io.Serializable;
 
-public class Article_Tag implements Serializable {
+public class ArticleTag implements Serializable {
 
     private long article_id;
     private long tag_id;
 
-    public Article_Tag(long article_id, long tag_id) {
+    public ArticleTag(long article_id, long tag_id) {
         this.article_id = article_id;
         this.tag_id = tag_id;
     }
 
-    public Article_Tag() {
+    public ArticleTag() {
     }
 
     public long getArticle_id() {
@@ -34,7 +34,7 @@ public class Article_Tag implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Article_Tag that = (Article_Tag) o;
+        ArticleTag that = (ArticleTag) o;
 
         if (article_id != that.article_id) return false;
         return tag_id == that.tag_id;

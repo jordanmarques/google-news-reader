@@ -166,29 +166,46 @@ public class MainActivity extends AppCompatActivity {
 
     private void search(String query) {
 
-        if(isNetworkAvailable()){
-            if(query.equals(INIT_SEARCH)){
-                LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, LoadArticleAsyncTask.DEFAULT_RESEARCH);
-                task.execute();
-                setCurrentQuery(INIT_SEARCH);
-            } else {
-                LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, query);
-                task.execute();
-                setCurrentQuery(query);
-            }
+        if(query.charAt(0) == "#".charAt(0)) {
+            tagSearch(query);
+        }else if(isNetworkAvailable()){
+            webSearch(query);
         } else {
-            if(query.equals(INIT_SEARCH)){
-                List<Article> allArticles = articleDAO.findAllArticles();
-                ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, allArticles);
-                listView.setAdapter(arrayAdapter);
-                setCurrentQuery(INIT_SEARCH);
-            } else {
-                List<Article> result = articleDAO.findByTitle(query);
-                MainActivity.setArticleList(result);
-                ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, result);
-                listView.setAdapter(arrayAdapter);
-                setCurrentQuery(query);
-            }
+            localSearch(query);
+        }
+    }
+
+    private void tagSearch(String query) {
+        List<Article> allArticles = articleDAO.findByTag(query.substring(1));
+        ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, allArticles);
+        listView.setAdapter(arrayAdapter);
+        setCurrentQuery(INIT_SEARCH);
+    }
+
+    private void localSearch(String query) {
+        if(query.equals(INIT_SEARCH)){
+            List<Article> allArticles = articleDAO.findAllArticles();
+            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, allArticles);
+            listView.setAdapter(arrayAdapter);
+            setCurrentQuery(INIT_SEARCH);
+        } else {
+            List<Article> result = articleDAO.findByTitle(query);
+            MainActivity.setArticleList(result);
+            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, result);
+            listView.setAdapter(arrayAdapter);
+            setCurrentQuery(query);
+        }
+    }
+
+    private void webSearch(String query) {
+        if(query.equals(INIT_SEARCH)){
+            LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, LoadArticleAsyncTask.DEFAULT_RESEARCH);
+            task.execute();
+            setCurrentQuery(INIT_SEARCH);
+        } else {
+            LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, query);
+            task.execute();
+            setCurrentQuery(query);
         }
     }
 

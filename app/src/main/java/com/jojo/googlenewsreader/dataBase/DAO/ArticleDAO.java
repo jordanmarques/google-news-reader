@@ -158,6 +158,40 @@ public class ArticleDAO {
         return article;
     }
 
+    public List<Article> findByTag(String query){
+        List<Article> articles = new ArrayList<>();
+        String joinQuery = "SELECT " + " a." +AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID + ", " +
+                "a." + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE + ", " +
+                "a." +AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_CONTENT + ", " +
+                "a." +AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_IMAGE_URL + ", " +
+                "a." +AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_URL + ", " +
+                "a." +AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_PUBLISHER + ", " +
+                "a." +AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DATE + ", " +
+                "a." +AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED +
+        " FROM " + AppDatabaseEntry.DATABASE_ARTICLE_TABLE + " a" +
+        " INNER JOIN " + AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE + " at ON a." + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID + " = at." + AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID +
+        " INNER JOIN " + AppDatabaseEntry.DATABASE_TAG_TABLE + " t ON at." + AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID + " = t." + AppDatabaseEntry.DATABASE_TAG_COLUMN_ID +
+        " WHERE t." + AppDatabaseEntry.DATABASE_TAG_COLUMN_LABEL + "=?";
+
+        Cursor cursor = dbInstance.rawQuery(joinQuery, new String[]{String.valueOf(query)});
+
+        if(cursor.moveToFirst()){
+            do{
+                articles.add(new Article(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_CONTENT)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_IMAGE_URL)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_URL)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_PUBLISHER)),
+                        cursor.getString(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DATE)),
+                        cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED))));
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        return articles;
+
+    }
+
     public void deleteArticle(Article article){
 
         String selection = AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID + " LIKE ?";
