@@ -122,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId()==R.id.listView) {
 
-            ListView listView = (ListView) v;
-            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            final ListView listView = (ListView) v;
+            final AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
             final Article article = (Article) listView.getItemAtPosition(acmi.position);
 
             menu.setHeaderTitle("Options");
@@ -144,7 +144,9 @@ public class MainActivity extends AppCompatActivity {
             menu.add(Menu.NONE, 3, 3, "Ajouter Tag").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    PopupMenu popup = new PopupMenu(MainActivity.this, findViewById(R.id.listView));
+
+                    //findViewById(R.id.listView)
+                    PopupMenu popup = new PopupMenu(MainActivity.this, getViewByPosition(acmi.position, listView));
 
                     //empecher fermer context menungui
                     //http://stackoverflow.com/questions/13784088/setting-popupmenu-menu-items-programmatically
@@ -192,6 +194,18 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public View getViewByPosition(int pos, ListView listView) {
+        final int firstListItemPosition = listView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
+
+        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
+            return listView.getAdapter().getView(pos, null, listView);
+        } else {
+            final int childIndex = pos - firstListItemPosition;
+            return listView.getChildAt(childIndex);
+        }
     }
 
     public static void setArticleList(List articleList) {
