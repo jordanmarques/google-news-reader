@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.asyncTasks.ImageDownloadAsyncTask;
 import com.jojo.googlenewsreader.pojo.Article;
+import com.jojo.googlenewsreader.pojo.Tag;
 
 import java.util.List;
 
@@ -27,14 +28,27 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
 
         TextView text = (TextView) line.findViewById(R.id.textViewArticle);
         ImageView image = (ImageView) line.findViewById(R.id.imageViewArticle);
+        TextView tags = (TextView) line.findViewById(R.id.tags);
+
         Article article  = getItem(position);
 
         text.setText(Html.fromHtml(article.getTitle()));
+        tags.setText(formatTagsForDisplay(article));
 
         ImageDownloadAsyncTask imageDownloadAsyncTask = new ImageDownloadAsyncTask(image, article);
         imageDownloadAsyncTask.execute();
 
         return line;
+    }
+
+    public String formatTagsForDisplay(Article article){
+        String formatedTags = "";
+
+        for(Tag tag : article.getTagList()){
+            formatedTags = formatedTags + tag.getLabel() + " ";
+        }
+
+        return formatedTags;
     }
 
 

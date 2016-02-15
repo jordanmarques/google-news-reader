@@ -149,7 +149,8 @@ public class MainActivity extends AppCompatActivity {
             menu.add(Menu.NONE, 3, 3, "Ajouter Tag").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    PopupMenu popup = new PopupMenu(MainActivity.this, getViewByPosition(acmi.position, listView));
+                    int position = acmi.position;
+                    PopupMenu popup = new PopupMenu(MainActivity.this, getViewByPosition(position, listView));
 
                     final TagDAO tagDAO = new TagDAO(MainActivity.this);
                     List<Tag> allTags = tagDAO.findAllTags();
@@ -162,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                         public boolean onMenuItemClick(MenuItem item) {
                             Tag tag = tagDAO.findTagByTitle(String.valueOf(item.getTitle()));
                             articleTagDAO.insertArticleTagLink(article, tag);
+                            search(currentQuery);
                             Toast.makeText(MainActivity.this, "Article lié au Tag: " + tag.getLabel(), Toast.LENGTH_SHORT).show();
                             return true;
                         }
