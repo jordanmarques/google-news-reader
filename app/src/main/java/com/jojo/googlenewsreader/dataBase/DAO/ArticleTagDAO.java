@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.jojo.googlenewsreader.dataBase.AppDataBase;
-import com.jojo.googlenewsreader.dataBase.AppDatabaseContract;
+import com.jojo.googlenewsreader.dataBase.AppDatabaseContract.AppDatabaseEntry;
 import com.jojo.googlenewsreader.pojo.Article;
 import com.jojo.googlenewsreader.pojo.ArticleTag;
 import com.jojo.googlenewsreader.pojo.Tag;
@@ -20,8 +20,8 @@ public class ArticleTagDAO {
     private SQLiteDatabase dbInstance;
 
     private final String[] PROJECTION_ARTICLE_TAG_TABLE = {
-            AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID,
-            AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID};
+            AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID,
+            AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID};
 
     public ArticleTagDAO(Context context) {
         db = new AppDataBase(context);
@@ -30,7 +30,7 @@ public class ArticleTagDAO {
 
     public List<ArticleTag> findAll(){
         List<ArticleTag> article_tag = new ArrayList<>();
-        Cursor cursor = dbInstance.query(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE,
+        Cursor cursor = dbInstance.query(AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE,
                 new String[]{"*"},
                 null,
                 null,
@@ -40,8 +40,8 @@ public class ArticleTagDAO {
 
         if(cursor.moveToFirst()){
             do{
-                article_tag.add(new ArticleTag(cursor.getInt(cursor.getColumnIndex(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID)),
-                        cursor.getInt(cursor.getColumnIndex(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID))));
+                article_tag.add(new ArticleTag(cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID)),
+                        cursor.getInt(cursor.getColumnIndex(AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID))));
             }while(cursor.moveToNext());
         }
         cursor.close();
@@ -49,21 +49,31 @@ public class ArticleTagDAO {
     }
 
     public void deleteArticleTagLink(Tag tag){
-        String selection = AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID + " LIKE ?";
+        String selection = AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID + " LIKE ?";
         String[] selectionArgs = { String.valueOf(tag.getId()) };
-        dbInstance.delete(AppDatabaseContract.AppDatabaseEntry.DATABASE_TAG_TABLE, selection, selectionArgs);
+        dbInstance.delete(AppDatabaseEntry.DATABASE_TAG_TABLE, selection, selectionArgs);
+    }
+
+    public void deleteArticleTagLink(Article article, Tag tag){
+//        String selection = AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID + " = ? AND " + AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID + " = ?";
+//        String[] selectionArgs = { String.valueOf(tag.getId()),  String.valueOf(article.getId())};
+//        dbInstance.delete(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE, selection, selectionArgs);
+        String deleteLink = "DELETE FROM " + AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE+ " WHERE " + AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID + "=" + String.valueOf(article.getId()) + " AND " +
+                AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID + "=" + String.valueOf(tag.getId()) + ";";
+        dbInstance.execSQL(deleteLink);
+
     }
 
     public void deleteArticleTagLink(Article article){
-        String selection = AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID + " LIKE ?";
+        String selection = AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID + " LIKE ?";
         String[] selectionArgs = { String.valueOf(article.getId()) };
-        dbInstance.delete(AppDatabaseContract.AppDatabaseEntry.DATABASE_TAG_TABLE, selection, selectionArgs);
+        dbInstance.delete(AppDatabaseEntry.DATABASE_TAG_TABLE, selection, selectionArgs);
     }
 
     public long insertArticleTagLink(Article article, Tag tag){
         ContentValues values = new ContentValues();
-        values.put(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID, article.getId());
-        values.put(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID, tag.getId());
-        return dbInstance.insert(AppDatabaseContract.AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE, null, values);
+        values.put(AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID, article.getId());
+        values.put(AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID, tag.getId());
+        return dbInstance.insert(AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE, null, values);
     }
 }

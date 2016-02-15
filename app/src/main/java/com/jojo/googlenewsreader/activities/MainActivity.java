@@ -172,6 +172,35 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
+            menu.add(Menu.NONE, 4, 4, "Supprimer Tag").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    int position = acmi.position;
+                    PopupMenu popup = new PopupMenu(MainActivity.this, getViewByPosition(position, listView));
+
+                    final TagDAO tagDAO = new TagDAO(MainActivity.this);
+
+
+                    List<Tag> articleTags = article.getTagList();
+                    for (Tag tag : articleTags) {
+                        popup.getMenu().add(1, 1, 1, tag.getLabel());
+                    }
+
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            Tag tag = tagDAO.findTagByTitle(String.valueOf(item.getTitle()));
+                            articleTagDAO.deleteArticleTagLink(article, tag);
+                            search(currentQuery);
+                            Toast.makeText(MainActivity.this, "Tag " + tag.getLabel() +" supprimé de l'article", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                    });
+                    popup.show();
+                    return false;
+                }
+            });
         }
 
     }
