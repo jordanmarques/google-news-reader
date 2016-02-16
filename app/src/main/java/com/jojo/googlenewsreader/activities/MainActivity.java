@@ -2,13 +2,11 @@ package com.jojo.googlenewsreader.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jojo.googlenewsreader.R;
@@ -149,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
             menu.add(Menu.NONE, 3, 3, "Ajouter Tag").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    int position = acmi.position;
+                    final int position = acmi.position;
                     PopupMenu popup = new PopupMenu(MainActivity.this, getViewByPosition(position, listView));
 
                     final TagDAO tagDAO = new TagDAO(MainActivity.this);
@@ -162,8 +161,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             Tag tag = tagDAO.findTagByTitle(String.valueOf(item.getTitle()));
-                            articleTagDAO.insertArticleTagLink(article, tag);
-                            search(currentQuery);
+                            addTagToArticle(tag, article, listView, position);
                             Toast.makeText(MainActivity.this, "Article lié au Tag: " + tag.getLabel(), Toast.LENGTH_SHORT).show();
                             return true;
                         }
@@ -176,11 +174,10 @@ public class MainActivity extends AppCompatActivity {
             menu.add(Menu.NONE, 4, 4, "Supprimer Tag").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    int position = acmi.position;
+                    final int position = acmi.position;
                     PopupMenu popup = new PopupMenu(MainActivity.this, getViewByPosition(position, listView));
 
                     final TagDAO tagDAO = new TagDAO(MainActivity.this);
-
 
                     List<Tag> articleTags = article.getTagList();
                     for (Tag tag : articleTags) {
@@ -191,8 +188,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             Tag tag = tagDAO.findTagByTitle(String.valueOf(item.getTitle()));
-                            articleTagDAO.deleteArticleTagLink(article, tag);
-                            search(currentQuery);
+                            removeTagToArticle(tag, article, listView, position);
                             Toast.makeText(MainActivity.this, "Tag " + tag.getLabel() +" supprimé de l'article", Toast.LENGTH_SHORT).show();
                             return true;
                         }
@@ -203,6 +199,32 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+    private void addTagToArticle(Tag tag, Article article, ListView listView, int position) {
+        articleTagDAO.insertArticleTagLink(article, tag);
+        View child = listView.getChildAt(position);
+        TextView textView= (TextView) child.findViewById(R.id.tags);
+
+        textView.setText(formatTagToAdd(tag.getLabel(), String.valueOf(textView.getText())));
+        articleList.get(position).getTagList().add(tag);
+    }
+
+    private void removeTagToArticle(Tag tag, Article article, ListView listView, int position) {
+        articleTagDAO.deleteArticleTagLink(article, tag);
+        View child = listView.getChildAt(position);
+        TextView textView= (TextView) child.findViewById(R.id.tags);
+
+        textView.setText(formatTagToRemove(tag.getLabel(), String.valueOf(textView.getText())));
+        articleList.get(position).getTagList().add(tag);
+    }
+
+    private String formatTagToAdd(String tagToAdd, String textViewValue) {
+        return textViewValue + " " + tagToAdd;
+    }
+
+    private String formatTagToRemove(String tagToAdd, String textViewValue) {
+        return textViewValue.replace(tagToAdd, "");
     }
 
     private void search(String query) {
