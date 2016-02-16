@@ -64,7 +64,7 @@ public class ArticleTagDAO {
     public void deleteArticleTagLink(Article article){
         String selection = AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID + " LIKE ?";
         String[] selectionArgs = { String.valueOf(article.getId()) };
-        dbInstance.delete(AppDatabaseEntry.DATABASE_TAG_TABLE, selection, selectionArgs);
+        dbInstance.delete(AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE, selection, selectionArgs);
     }
 
     public long insertArticleTagLink(Article article, Tag tag){
