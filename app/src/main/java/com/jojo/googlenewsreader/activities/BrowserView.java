@@ -9,7 +9,7 @@ import com.jojo.googlenewsreader.R;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class BrowserView extends AppCompatActivity {
+public class BrowserView extends ParentActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

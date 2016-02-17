@@ -22,7 +22,7 @@ import com.jojo.googlenewsreader.pojo.Tag;
 
 import java.util.List;
 
-public class TagManager extends AppCompatActivity {
+public class TagManager extends ParentActivity {
 
     private TagDAO tagDAO;
     private ArticleTagDAO articleTagDAO;

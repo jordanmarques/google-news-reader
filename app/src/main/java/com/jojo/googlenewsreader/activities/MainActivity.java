@@ -32,7 +32,7 @@ import com.jojo.googlenewsreader.pojo.Tag;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ParentActivity {
 
     private static final String INIT_SEARCH = "init_search";
 

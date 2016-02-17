@@ -6,6 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowTitleBackgroundStyle">@style/WindowTitleStyle</item>
+    </style>
+
+    <style name="WindowTitleStyle">
+        <item name="android:padding">0px</item>
     </style>
 
 </resources>

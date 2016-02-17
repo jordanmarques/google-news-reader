@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.pojo.Article;
 
-public class ArticleDetail extends AppCompatActivity {
+public class ArticleDetail extends ParentActivity {
 
     private Article article;
 
