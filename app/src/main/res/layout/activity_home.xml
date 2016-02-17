@@ -2,28 +2,51 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".activities.MainActivity"
     android:weightSum="1"
     android:orientation="vertical">
 
+    <RelativeLayout android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:orientation="vertical"
+        android:id="@+id/relativeLayout">
+
+        <TextView
+            android:id="@+id/networkLabel"
+            android:layout_width="80dp"
+            android:layout_height="20dp"
+            android:text="Aucun Réseau"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+            android:paddingTop="3dp"
+            android:paddingLeft="8dp"
+            android:background="@drawable/border_color_red"
+            android:layout_alignBottom="@+id/titleBar"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
         <SearchView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/searchView"
-            />
+            android:id="@+id/searchView" />
     </LinearLayout>
 
     <RelativeLayout android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_below="@+id/linearLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="18dp">
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="70dp"
@@ -57,7 +80,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="120dp">
+        android:layout_marginTop="120dp"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <ListView
             android:layout_width="match_parent"

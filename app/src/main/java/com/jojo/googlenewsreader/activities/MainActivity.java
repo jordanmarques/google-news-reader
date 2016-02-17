@@ -43,6 +43,7 @@ public class MainActivity extends ParentActivity {
     private ListView listView;
     private ArticleDAO articleDAO;
     private ArticleTagDAO articleTagDAO;
+    private static TextView label;
 
     public static List<Article> articleList;
     public static String currentQuery = "";
@@ -61,6 +62,7 @@ public class MainActivity extends ParentActivity {
         Button tagButton = (Button) findViewById(R.id.button);
         Button refreshButton = (Button) findViewById(R.id.button2);
         Button lastNewsButton = (Button) findViewById(R.id.button3);
+        label = (TextView) findViewById(R.id.networkLabel);
 
         search(INIT_SEARCH);
 
@@ -203,6 +205,16 @@ public class MainActivity extends ParentActivity {
             });
         }
 
+    }
+
+    public static void onNetworkChange(Boolean state){
+        if(null != label){
+            if(state){
+                label.setVisibility(View.INVISIBLE);
+            } else {
+                label.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void addTagToArticle(Tag tag, Article article, ListView listView, int position) {
