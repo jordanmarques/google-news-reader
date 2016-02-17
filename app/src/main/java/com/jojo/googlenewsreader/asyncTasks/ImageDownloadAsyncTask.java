@@ -1,21 +1,32 @@
 package com.jojo.googlenewsreader.asyncTasks;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 
+import com.jojo.googlenewsreader.R;
+import com.jojo.googlenewsreader.activities.MainActivity;
 import com.jojo.googlenewsreader.pojo.Article;
+import com.jojo.googlenewsreader.utils.NetworkUtil;
 
 import java.net.URL;
 
 public class ImageDownloadAsyncTask extends AsyncTask<Void, Bitmap, Bitmap> {
     private ImageView imageView;
     private Article article;
+    private Context context;
 
-    public ImageDownloadAsyncTask(ImageView imageView, Article article) {
+    public ImageDownloadAsyncTask(Context context, ImageView imageView, Article article) {
         this.imageView = imageView;
         this.article = article;
+        this.context = context;
     }
 
     @Override
@@ -36,6 +47,13 @@ public class ImageDownloadAsyncTask extends AsyncTask<Void, Bitmap, Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        imageView.setImageBitmap(bitmap);
+        if(NetworkUtil.getConnectivityStatusBoolean(context)){
+            imageView.setImageBitmap(bitmap);
+            imageView.setBackgroundColor(Color.argb(0, 0, 0, 0));
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                imageView.setBackground(ContextCompat.getDrawable(context, R.drawable.no_image));
+            }
+        }
     }
 }

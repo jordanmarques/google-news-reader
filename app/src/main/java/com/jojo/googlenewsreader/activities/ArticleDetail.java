@@ -15,12 +15,12 @@ import com.jojo.googlenewsreader.pojo.Article;
 
 public class ArticleDetail extends ParentActivity {
 
-    private Article article;
-
-    private static final int PORTRAIT = 1;
-
-    public static Bitmap image;
     public static String urlArticle;
+    public static Bitmap image;
+
+    private Article article;
+    private static final int PORTRAIT = 1;
+    private static Button webViewButton;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +57,7 @@ public class ArticleDetail extends ParentActivity {
         }
 
 
-        Button webViewButton = (Button) findViewById(R.id.openWebView);
+        webViewButton = (Button) findViewById(R.id.openWebView);
         webViewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ArticleDetail.this, BrowserView.class);
@@ -73,6 +73,12 @@ public class ArticleDetail extends ParentActivity {
                 onBackPressed();
             }
         });
+    }
+
+    public static void onNetworkChange(Boolean state){
+        if(! (null == webViewButton)){
+            webViewButton.setEnabled(state);
+        }
     }
 
     public static Bitmap getImage() {

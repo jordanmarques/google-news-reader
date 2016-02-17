@@ -17,6 +17,7 @@ import com.jojo.googlenewsreader.pojo.Tag;
 import java.util.List;
 
 public class ArticleArrayAdapter extends ArrayAdapter<Article> {
+
     public ArticleArrayAdapter(Context context, int resource, List<Article> objects) {
         super(context, resource, objects);
     }
@@ -35,7 +36,7 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
         text.setText(Html.fromHtml(article.getTitle()));
         tags.setText(formatTagsForDisplay(article));
 
-        ImageDownloadAsyncTask imageDownloadAsyncTask = new ImageDownloadAsyncTask(image, article);
+        ImageDownloadAsyncTask imageDownloadAsyncTask = new ImageDownloadAsyncTask(getContext(), image, article);
         imageDownloadAsyncTask.execute();
 
         return line;

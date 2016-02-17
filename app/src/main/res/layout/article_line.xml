@@ -10,7 +10,8 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        android:background="@drawable/no_image"/>
 
     <TextView
         android:id="@+id/textViewArticle"

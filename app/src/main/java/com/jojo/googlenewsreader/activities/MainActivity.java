@@ -1,7 +1,9 @@
 package com.jojo.googlenewsreader.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +25,13 @@ import android.widget.Toast;
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.arrayAdapter.ArticleArrayAdapter;
 import com.jojo.googlenewsreader.asyncTasks.LoadArticleAsyncTask;
+import com.jojo.googlenewsreader.brodcastReceiver.NetworkChangeReceiver;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleTagDAO;
 import com.jojo.googlenewsreader.dataBase.DAO.TagDAO;
 import com.jojo.googlenewsreader.pojo.Article;
 import com.jojo.googlenewsreader.pojo.Tag;
+import com.jojo.googlenewsreader.utils.NetworkUtil;
 
 import java.util.List;
 
@@ -60,6 +64,11 @@ public class MainActivity extends ParentActivity {
 
         search(INIT_SEARCH);
 
+        BroadcastReceiver networkChangeReceiver = new NetworkChangeReceiver();
+
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeReceiver, filter);
+
         refreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +99,7 @@ public class MainActivity extends ParentActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 View child = listView.getChildAt(position);
-                if(isNetworkAvailable()) {
+                if(NetworkUtil.getConnectivityStatusBoolean(MainActivity.this)) {
                     ImageView imageView = (ImageView) child.findViewById(R.id.imageViewArticle);
                     imageView.buildDrawingCache();
                     ArticleDetail.setImage(imageView.getDrawingCache());
@@ -231,7 +240,7 @@ public class MainActivity extends ParentActivity {
 
         if(query.charAt(0) == "#".charAt(0)) {
             tagSearch(query);
-        }else if(isNetworkAvailable()){
+        }else if(NetworkUtil.getConnectivityStatusBoolean(MainActivity.this)){
             webSearch(query);
         } else {
             localSearch(query);
@@ -274,12 +283,6 @@ public class MainActivity extends ParentActivity {
     public void deleteArticle(Article article){
         articleDAO.deleteArticle(article);
         articleTagDAO.deleteArticleTagLink(article);
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public View getViewByPosition(int pos, ListView listView) {
