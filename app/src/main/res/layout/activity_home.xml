@@ -37,8 +37,8 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:text="Rafraichir"
-            android:textSize="8dp"
+            android:text="Rafraichir la recherche"
+            android:textSize="6dp"
             android:id="@+id/button2"
             android:layout_centerHorizontal="true"/>
 
