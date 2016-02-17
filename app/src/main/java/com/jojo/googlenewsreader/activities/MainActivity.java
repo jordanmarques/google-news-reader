@@ -64,11 +64,6 @@ public class MainActivity extends ParentActivity {
 
         search(INIT_SEARCH);
 
-        BroadcastReceiver networkChangeReceiver = new NetworkChangeReceiver();
-
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkChangeReceiver, filter);
-
         refreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
