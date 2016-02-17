@@ -24,8 +24,8 @@
         android:id="@+id/tags"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textViewArticle"
-        android:layout_marginTop="1dip"
-        android:layout_toRightOf="@+id/imageViewArticle"/>
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/textViewArticle"
+        android:layout_alignStart="@+id/textViewArticle" />
 
 </RelativeLayout>
