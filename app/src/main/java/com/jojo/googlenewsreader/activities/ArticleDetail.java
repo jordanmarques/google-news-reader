@@ -14,6 +14,9 @@ import android.widget.TextView;
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.pojo.Article;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 public class ArticleDetail extends ParentActivity {
 
     public static String urlArticle;
@@ -40,6 +43,7 @@ public class ArticleDetail extends ParentActivity {
         TextView description = (TextView)findViewById(R.id.description);
         TextView publisher = (TextView)findViewById(R.id.textView2);
         TextView date = (TextView)findViewById(R.id.textView3);
+        TextView url = (TextView)findViewById(R.id.url);
         ImageView imageViewLandscape = (ImageView)findViewById(R.id.imageViewLandscape);
 
 
@@ -54,6 +58,17 @@ public class ArticleDetail extends ParentActivity {
         date.setText(Html.fromHtml(article.getDate()));
         imageViewLandscape.setImageBitmap(image);
 
+
+
+        if (orientation == PORTRAIT){
+            String articleUrl = article.getUrl();
+            try {
+                urlArticle = URLDecoder.decode(articleUrl, "UTF-8");
+                url.setText(urlArticle);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
 
 
         webViewButton = (Button) findViewById(R.id.openWebView);

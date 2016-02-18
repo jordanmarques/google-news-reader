@@ -5,14 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.Window;
-import android.widget.TextView;
 
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.brodcastReceiver.NetworkChangeReceiver;
-import com.jojo.googlenewsreader.utils.NetworkUtil;
 
 
 public class ParentActivity extends Activity {

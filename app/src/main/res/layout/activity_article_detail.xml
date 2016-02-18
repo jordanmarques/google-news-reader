@@ -62,15 +62,24 @@
                 android:layout_toEndOf="@+id/imageViewLandscape"
                 android:background="@drawable/border_line_left"/>
 
-        </RelativeLayout>
+    </RelativeLayout>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="220dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Descritpion"
             android:id="@+id/description"
             android:layout_below="@+id/srl2"
             android:background="@drawable/border_line_top"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="url"
+            android:id="@+id/url"
+            android:textSize="8dp"
+            android:layout_below="@+id/description"/>
 
     </RelativeLayout>
 
