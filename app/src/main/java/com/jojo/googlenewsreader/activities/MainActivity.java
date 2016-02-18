@@ -1,13 +1,12 @@
 package com.jojo.googlenewsreader.activities;
 
-import android.content.BroadcastReceiver;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.PopupMenu;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.arrayAdapter.ArticleArrayAdapter;
 import com.jojo.googlenewsreader.asyncTasks.LoadArticleAsyncTask;
-import com.jojo.googlenewsreader.brodcastReceiver.NetworkChangeReceiver;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleTagDAO;
 import com.jojo.googlenewsreader.dataBase.DAO.TagDAO;
@@ -34,6 +32,8 @@ import com.jojo.googlenewsreader.pojo.Tag;
 import com.jojo.googlenewsreader.utils.NetworkUtil;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainActivity extends ParentActivity {
@@ -305,6 +305,27 @@ public class MainActivity extends ParentActivity {
             final int childIndex = pos - firstListItemPosition;
             return listView.getChildAt(childIndex);
         }
+    }
+
+
+    public void Notification(String notificationTitle, String notificationMessage) {
+        Notification noti = new Notification.Builder(this)
+                .setContentTitle(notificationTitle)
+                .setContentText(notificationMessage)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .build();
+    }
+
+
+    private void launchSynchro(){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                // Notification Title and Message
+                Notification("This is message from Dipak Keshariya (Android Application Developer)", "This is Android Notification Message");
+            }
+        }, 5000);
     }
 
     public static void setArticleList(List articleList) {

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Google News Reader</string>
+    <string name="message">This is Android Notification Message</string>
 </resources>
