@@ -60,23 +60,12 @@ public class MainActivity extends ParentActivity {
 
         SearchView searchView = (SearchView)findViewById(R.id.searchView);
         Button tagButton = (Button) findViewById(R.id.button);
-        Button refreshButton = (Button) findViewById(R.id.button2);
         Button lastNewsButton = (Button) findViewById(R.id.button3);
         label = (TextView) findViewById(R.id.networkLabel);
 
 
         search(INIT_SEARCH);
         launchAutoUpdate();
-
-        refreshButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String currentQuery = MainActivity.getCurrentQuery();
-                if (!currentQuery.trim().equals("")) {
-                    search(currentQuery);
-                }
-            }
-        });
 
         lastNewsButton.setOnClickListener(new OnClickListener() {
             @Override
