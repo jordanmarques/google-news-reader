@@ -37,7 +37,7 @@ import java.util.List;
 
 public class MainActivity extends ParentActivity {
 
-    private static final String INIT_SEARCH = "init_search";
+    public static final String INIT_SEARCH = "init_search";
 
     private ListView listView;
     private ArticleDAO articleDAO;
@@ -100,7 +100,7 @@ public class MainActivity extends ParentActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                View child = listView.getChildAt(position);
+                View child = listView.getChildAt(position - listView.getFirstVisiblePosition());
                 if(NetworkUtil.getConnectivityStatusBoolean(MainActivity.this)) {
                     ImageView imageView = (ImageView) child.findViewById(R.id.imageViewArticle);
                     imageView.buildDrawingCache();
@@ -347,6 +347,8 @@ public class MainActivity extends ParentActivity {
                             notification(articleCounter + " nouveaux articles chargés");
                             break;
                     }
+                } else {
+                    notification("Chargement Impossible: Pas de Réseau");
                 }
                 h.postDelayed(this, delay);
             }

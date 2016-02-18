@@ -113,6 +113,10 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
                 }
             }
 
+            if(query.equals(DEFAULT_RESEARCH)){
+                articleList = articleDAO.findAllArticles();
+            }
+
             populatePublishDateField(articleList);
             sortByPublishedDate(articleList);
 
