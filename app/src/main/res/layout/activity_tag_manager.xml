@@ -20,13 +20,13 @@
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Créer"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
         android:id="@+id/button7"
         android:layout_alignBottom="@+id/editText"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/plus_button"/>
 
     <ListView
         android:layout_width="wrap_content"
