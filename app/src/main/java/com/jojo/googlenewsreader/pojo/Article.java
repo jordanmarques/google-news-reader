@@ -3,9 +3,11 @@ package com.jojo.googlenewsreader.pojo;
 import android.text.Html;
 
 import java.io.Serializable;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
-public class Article implements Serializable {
+public class Article implements Serializable, Comparator<Article> {
 
     private int id;
     private String title;
@@ -16,6 +18,7 @@ public class Article implements Serializable {
     private String date;
     private int deleted;
     private List<Tag> tagList;
+    private Date publisheDate;
 
     public Article() {
     }
@@ -101,5 +104,17 @@ public class Article implements Serializable {
     }
     public void setTagList(List<Tag> tagList) {
         this.tagList = tagList;
+    }
+
+    public Date getPublisheDate() {
+        return publisheDate;
+    }
+    public void setPublisheDate(Date publisheDate) {
+        this.publisheDate = publisheDate;
+    }
+
+    @Override
+    public int compare(Article lhs, Article rhs) {
+        return lhs.getPublisheDate().compareTo(rhs.getPublisheDate());
     }
 }

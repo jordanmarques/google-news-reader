@@ -33,8 +33,6 @@ import com.jojo.googlenewsreader.pojo.Tag;
 import com.jojo.googlenewsreader.utils.NetworkUtil;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class MainActivity extends ParentActivity {

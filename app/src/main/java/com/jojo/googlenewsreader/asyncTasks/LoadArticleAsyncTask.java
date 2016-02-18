@@ -18,8 +18,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -105,12 +112,34 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
                     }
                 }
             }
+
+            populatePublishDateField(articleList);
+            sortByPublishedDate(articleList);
+
             return articleList;
-        }
-        catch (IOException | JSONException error) {
+
+        } catch (IOException | JSONException error) {
             error.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return new ArrayList<Article>();
+    }
+
+    private void sortByPublishedDate(List<Article> articleList) {
+        Collections.sort(articleList, new Comparator<Article>() {
+            public int compare(Article o1, Article o2) {
+                return o2.getPublisheDate().compareTo(o1.getPublisheDate());
+            }
+        });
+    }
+
+    private void populatePublishDateField(List<Article> articleList) throws ParseException {
+        DateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss", Locale.ENGLISH);
+        for(Article loopArticle : articleList){
+            loopArticle.setDate(loopArticle.getDate().replace(" -0800", ""));
+            loopArticle.setPublisheDate(format.parse(loopArticle.getDate()));
+        }
     }
 
     public static JSONArray getJsonFromServer(String url) throws IOException {
