@@ -52,10 +52,8 @@ public class ArticleDetail extends ParentActivity {
         description.setText(Html.fromHtml(article.getContent()));
         publisher.setText(Html.fromHtml(article.getPublisher()));
         date.setText(Html.fromHtml(article.getDate()));
+        imageViewLandscape.setImageBitmap(image);
 
-        if (orientation != PORTRAIT) {
-            imageViewLandscape.setImageBitmap(image);
-        }
 
 
         webViewButton = (Button) findViewById(R.id.openWebView);
