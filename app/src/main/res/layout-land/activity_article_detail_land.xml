@@ -63,11 +63,11 @@
             android:layout_width="370dp"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceMedium"
-
             android:id="@+id/scrollView"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true">
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/border_line_left">
 
             <TextView
                 android:id="@+id/description"
@@ -80,8 +80,10 @@
 
     </RelativeLayout>
 
-    <RelativeLayout android:layout_width="match_parent"
-        android:layout_height="40dp" >
+    <RelativeLayout android:id="@+id/rl3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/border_line_top">
 
         <TextView
             android:layout_width="wrap_content"
