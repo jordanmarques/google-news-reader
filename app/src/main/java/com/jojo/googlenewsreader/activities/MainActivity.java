@@ -1,11 +1,12 @@
 package com.jojo.googlenewsreader.activities;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.PopupMenu;
 import android.view.ContextMenu;
@@ -47,6 +48,7 @@ public class MainActivity extends ParentActivity {
 
     public static List<Article> articleList;
     public static String currentQuery = "";
+    public static int articleCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,9 @@ public class MainActivity extends ParentActivity {
         Button lastNewsButton = (Button) findViewById(R.id.button3);
         label = (TextView) findViewById(R.id.networkLabel);
 
+
         search(INIT_SEARCH);
+        launchAutoUpdate();
 
         refreshButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -126,7 +130,6 @@ public class MainActivity extends ParentActivity {
                 return false;
             }
         });
-
 
     }
 
@@ -307,25 +310,49 @@ public class MainActivity extends ParentActivity {
         }
     }
 
-
-    public void Notification(String notificationTitle, String notificationMessage) {
-        Notification noti = new Notification.Builder(this)
-                .setContentTitle(notificationTitle)
-                .setContentText(notificationMessage)
+    public void notification(String content){
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .build();
+                .setContentTitle("Google News Reader")
+                .setAutoCancel(true)
+                .setContentText(content);
+
+        Intent resultIntent = new Intent(this, MainActivity.class);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(this);
+        stackBuilder.addNextIntent(resultIntent);
+
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, mBuilder.build());
     }
 
+    public void launchAutoUpdate(){
+        final Handler h = new Handler();
+        final int delay = 10*60*1*1000; //minutes
 
-    private void launchSynchro(){
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
+        h.postDelayed(new Runnable() {
             public void run() {
-                // Notification Title and Message
-                Notification("This is message from Dipak Keshariya (Android Application Developer)", "This is Android Notification Message");
+                if (NetworkUtil.getConnectivityStatusBoolean(MainActivity.this)) {
+                    search(INIT_SEARCH);
+                    switch (articleCounter) {
+                        case 0:
+                            notification("Aucun nouvel article chargé");
+                            break;
+                        case 1:
+                            notification("1 nouvel article chargé");
+                            break;
+                        default:
+                            notification(articleCounter + " nouveaux articles chargés");
+                            break;
+                    }
+                }
+                h.postDelayed(this, delay);
             }
-        }, 5000);
+        }, delay);
     }
 
     public static void setArticleList(List articleList) {

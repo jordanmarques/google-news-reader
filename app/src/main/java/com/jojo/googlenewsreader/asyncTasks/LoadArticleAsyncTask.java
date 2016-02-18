@@ -97,6 +97,7 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
                 if(!articleDAO.isArticleInDB(article)){
                     long articleId = articleDAO.insertArticle(article);
                     articleList.add(articleDAO.findById(articleId));
+                    MainActivity.articleCounter =+ 1;
                 } else {
                     Article byTitleStrict = articleDAO.findByTitleStrict(article);
                     if(byTitleStrict.getDeleted() == 0) {
