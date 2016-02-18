@@ -50,10 +50,11 @@ public class ArticleDAO {
 
     public List<Article> findAllArticles(){
         List<Article> articles = new ArrayList<>();
+        String[] wherevalues = {String.valueOf('0')};
         Cursor cursor = dbInstance.query(AppDatabaseEntry.DATABASE_ARTICLE_TABLE,
                 PROJECTION_ARTICLE_TABLE,
-                null,
-                null,
+                AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED + "=?",
+                wherevalues,
                 null,
                 null,
                 null);
@@ -108,7 +109,7 @@ public class ArticleDAO {
     public List<Article> findByTitle(String query) {
         List<Article> articles = new ArrayList<>();
         query = "%" + query + "%";
-        String[] title = {query};
+        String[] title = {"0", query};
 
         Cursor cursor = dbInstance.rawQuery("SELECT " + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID + "," +
                 AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE + "," +
@@ -119,7 +120,7 @@ public class ArticleDAO {
                 AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DATE + "," +
                 AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED +
                 " FROM " + AppDatabaseEntry.DATABASE_ARTICLE_TABLE +
-                " WHERE " + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE + " LIKE ?", title);
+                " WHERE " + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED + " LIKE ? AND " + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_TITLE + " LIKE ?", title);
 
         if(cursor.moveToFirst()){
             do{
@@ -179,9 +180,9 @@ public class ArticleDAO {
         " FROM " + AppDatabaseEntry.DATABASE_ARTICLE_TABLE + " a" +
         " INNER JOIN " + AppDatabaseEntry.DATABASE_ARTICLE_TAG_TABLE + " at ON a." + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID + " = at." + AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_ARTICLE_ID +
         " INNER JOIN " + AppDatabaseEntry.DATABASE_TAG_TABLE + " t ON at." + AppDatabaseEntry.DATABASE_ARTICLE_TAG_COLUMN_TAG_ID + " = t." + AppDatabaseEntry.DATABASE_TAG_COLUMN_ID +
-        " WHERE t." + AppDatabaseEntry.DATABASE_TAG_COLUMN_LABEL + "=?";
+        " WHERE t." + AppDatabaseEntry.DATABASE_TAG_COLUMN_LABEL + "=? AND " + "a." + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED + "=?";
 
-        Cursor cursor = dbInstance.rawQuery(joinQuery, new String[]{String.valueOf(query)});
+        Cursor cursor = dbInstance.rawQuery(joinQuery, new String[]{String.valueOf(query),"0"});
 
         if(cursor.moveToFirst()){
             do{
@@ -204,9 +205,16 @@ public class ArticleDAO {
 
     public void deleteArticle(Article article){
 
-        String selection = AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID + " LIKE ?";
-        String[] selectionArgs = { String.valueOf(article.getId()) };
-        dbInstance.delete(AppDatabaseEntry.DATABASE_ARTICLE_TABLE, selection, selectionArgs);
+//        String selection = AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID + " LIKE ?";
+//        String[] selectionArgs = { String.valueOf(article.getId()) };
+//        dbInstance.delete(AppDatabaseEntry.DATABASE_ARTICLE_TABLE, selection, selectionArgs);
+
+        String query = "UPDATE " + AppDatabaseEntry.DATABASE_ARTICLE_TABLE +
+                " SET " + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_DELETED + "= 1" +
+                " WHERE " + AppDatabaseEntry.DATABASE_ARTICLE_COLUMN_ID + "=" + String.valueOf(article.getId());
+
+        dbInstance.execSQL(query);
+
     }
 
     public List<Tag> findArticlesTag(Article article){

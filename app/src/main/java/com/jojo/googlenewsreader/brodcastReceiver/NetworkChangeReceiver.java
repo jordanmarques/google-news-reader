@@ -7,7 +7,6 @@ import android.content.Intent;
 
 import com.jojo.googlenewsreader.activities.ArticleDetail;
 import com.jojo.googlenewsreader.activities.MainActivity;
-import com.jojo.googlenewsreader.activities.ParentActivity;
 import com.jojo.googlenewsreader.utils.NetworkUtil;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {

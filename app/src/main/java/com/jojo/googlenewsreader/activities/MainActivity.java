@@ -79,7 +79,9 @@ public class MainActivity extends ParentActivity {
         lastNewsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Chargement des dernier articles...", Toast.LENGTH_SHORT).show();
+                if(NetworkUtil.getConnectivityStatusBoolean(MainActivity.this)){
+                    Toast.makeText(getApplicationContext(), "Chargement des dernier articles...", Toast.LENGTH_SHORT).show();
+                }
                 search(INIT_SEARCH);
             }
         });
