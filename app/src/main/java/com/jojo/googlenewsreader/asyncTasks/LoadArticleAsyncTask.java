@@ -94,9 +94,14 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
 
             for(int i = 0; i<jsonString.length(); i++) {
 
-               Article article = new Article(jsonString.getJSONObject(i).getString("title"),
+                String image ="";
+                if(jsonString.getJSONObject(i).has("image")){
+                    image = jsonString.getJSONObject(i).getJSONObject("image").getString("url");
+                }
+
+                Article article = new Article(jsonString.getJSONObject(i).getString("title"),
                         jsonString.getJSONObject(i).getString("content"),
-                        jsonString.getJSONObject(i).getJSONObject("image").getString("url"),
+                        image,
                         jsonString.getJSONObject(i).getString("url"),
                         jsonString.getJSONObject(i).getString("publisher"),
                         jsonString.getJSONObject(i).getString("publishedDate"));
