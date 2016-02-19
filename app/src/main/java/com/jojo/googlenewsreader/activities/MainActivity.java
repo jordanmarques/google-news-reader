@@ -68,7 +68,7 @@ public class MainActivity extends ParentActivity {
 
 
         search(INIT_SEARCH);
-        launchAutoUpdate();
+        launchAutoUpdate(1);
 
         lastNewsButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -343,9 +343,9 @@ public class MainActivity extends ParentActivity {
         mNotificationManager.notify(0, mBuilder.build());
     }
 
-    public void launchAutoUpdate(){
+    public void launchAutoUpdate(int minutes){
         final Handler h = new Handler();
-        final int delay = 10*60*1*1000; //minutes
+        final int delay = minutes*60*1*1000; //minutes
 
         h.postDelayed(new Runnable() {
             public void run() {
