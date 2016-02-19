@@ -27,8 +27,6 @@ public class ParentActivity extends Activity {
         networkChangeReceive = new NetworkChangeReceiver();
         filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeReceive, filter);
-
-        Toast.makeText(ParentActivity.this, "create", Toast.LENGTH_SHORT).show();
     }
 
     @Override

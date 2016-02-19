@@ -87,9 +87,9 @@ public class ArticleDetail extends ParentActivity {
         });
     }
 
-    public static void onNetworkChange(Boolean state){
-        if(! (null == webViewButton)){
-            webViewButton.setEnabled(state);
+    public static void onNetworkChange(Boolean networkState){
+        if(null != webViewButton){
+            webViewButton.setEnabled(networkState);
         }
     }
 

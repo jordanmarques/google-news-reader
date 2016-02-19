@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,10 +49,11 @@ public class MainActivity extends ParentActivity {
     private ListView listView;
     private ArticleDAO articleDAO;
     private ArticleTagDAO articleTagDAO;
+    private Runnable runnable;
+    private Handler handler;
     private static TextView label;
 
     public static List<Article> articleList;
-    public static String currentQuery = "";
     public static int articleCounter;
 
     @Override
@@ -67,8 +72,76 @@ public class MainActivity extends ParentActivity {
         label = (TextView) findViewById(R.id.networkLabel);
 
 
+        final Button optionMenu = new Button(this);
+        optionMenu.setBackground(ContextCompat.getDrawable(this, R.drawable.menu_action));
+
+        RelativeLayout titleBar = (RelativeLayout) findViewById(R.id.relativeLayoutTitleBar);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(110,130);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+
+        titleBar.addView(optionMenu, layoutParams);
+
         search(INIT_SEARCH);
-        launchAutoUpdate(30);
+
+        optionMenu.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SpannableString title = new SpannableString("Mise à Jour : ");
+                title.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimaryDark)), 0, title.length(), 0);
+
+                PopupMenu popupOption = new PopupMenu(MainActivity.this, optionMenu);
+
+                popupOption.getMenu().add(1, 1, 1, "").setTitle(title);
+
+                popupOption.getMenu().add(1, 1, 1, "1 minute").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        launchAutoUpdate(1);
+                        Toast.makeText(MainActivity.this, "Mise à jour automatique toutes les minutes", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                });
+                popupOption.getMenu().add(1, 1, 1, "15 minutes").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        launchAutoUpdate(15);
+                        Toast.makeText(MainActivity.this, "Mise à jour automatique toutes les 15 minutes", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                });
+                popupOption.getMenu().add(1, 1, 1, "30 minutes").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        launchAutoUpdate(30);
+                        Toast.makeText(MainActivity.this, "Mise à jour automatique toutes les 30 minutes", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                });
+                popupOption.getMenu().add(1, 1, 1, "60 minutes").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        launchAutoUpdate(60);
+                        Toast.makeText(MainActivity.this, "Mise à jour automatique toutes les 60 minutes", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                });
+                popupOption.getMenu().add(1, 1, 1, "Désactiver").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(removeAutoUpdate()){
+                            Toast.makeText(MainActivity.this, "Mise à jour automatique désactivé", Toast.LENGTH_SHORT).show();
+                        }
+                        return false;
+                    }
+                });
+
+                popupOption.show();
+
+
+            }
+        });
 
         lastNewsButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -208,9 +281,9 @@ public class MainActivity extends ParentActivity {
 
     }
 
-    public static void onNetworkChange(Boolean state){
+    public static void onNetworkChange(Boolean availableNetwork){
         if(null != label){
-            if(state){
+            if(availableNetwork){
                 label.setVisibility(View.INVISIBLE);
             } else {
                 label.setVisibility(View.VISIBLE);
@@ -265,7 +338,6 @@ public class MainActivity extends ParentActivity {
         Utils.sortByPublishedDate(articleList);
         ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
         listView.setAdapter(arrayAdapter);
-        setCurrentQuery(INIT_SEARCH);
     }
 
     private void localSearch(String query) {
@@ -279,7 +351,6 @@ public class MainActivity extends ParentActivity {
             Utils.sortByPublishedDate(articleList);
             ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
             listView.setAdapter(arrayAdapter);
-            setCurrentQuery(INIT_SEARCH);
         } else {
             articleList = articleDAO.findByTitle(query);
             try {
@@ -290,7 +361,6 @@ public class MainActivity extends ParentActivity {
             Utils.sortByPublishedDate(articleList);
             ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
             listView.setAdapter(arrayAdapter);
-            setCurrentQuery(query);
         }
     }
 
@@ -298,11 +368,9 @@ public class MainActivity extends ParentActivity {
         if(query.equals(INIT_SEARCH)){
             LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, LoadArticleAsyncTask.DEFAULT_RESEARCH);
             task.execute();
-            setCurrentQuery(INIT_SEARCH);
         } else {
             LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, query);
             task.execute();
-            setCurrentQuery(query);
         }
     }
 
@@ -344,10 +412,10 @@ public class MainActivity extends ParentActivity {
     }
 
     public void launchAutoUpdate(int minutes){
-        final Handler h = new Handler();
-        final int delay = minutes*60*1*1000; //minutes
+        handler = new Handler();
+        final int delay = minutes*60*1000; //minutes
 
-        h.postDelayed(new Runnable() {
+        runnable = new Runnable() {
             public void run() {
                 if (NetworkUtil.getConnectivityStatusBoolean(MainActivity.this)) {
                     search(INIT_SEARCH);
@@ -365,20 +433,22 @@ public class MainActivity extends ParentActivity {
                 } else {
                     notification("Chargement Impossible: Pas de Réseau");
                 }
-                h.postDelayed(this, delay);
+                handler.postDelayed(this, delay);
             }
-        }, delay);
+        };
+        handler.postDelayed(runnable, delay);
+    }
+
+    public boolean removeAutoUpdate(){
+        if(null != runnable && null != handler){
+            handler.removeCallbacks(runnable);
+            return true;
+        }
+        return false;
     }
 
     public static void setArticleList(List articleList) {
         MainActivity.articleList = articleList;
-    }
-
-    public static void setCurrentQuery(String currentQuery){
-        MainActivity.currentQuery = currentQuery;
-    }
-    public static String getCurrentQuery(){
-        return MainActivity.currentQuery;
     }
 
     public ListView getListView() {
