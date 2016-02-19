@@ -44,12 +44,6 @@ public class ArticleDetail extends ParentActivity {
         TextView url = (TextView)findViewById(R.id.url);
         ImageView imageViewLandscape = (ImageView)findViewById(R.id.imageViewLandscape);
 
-
-        if(Html.fromHtml(article.getTitle()).length() > 55){
-            article.setTitle(Html.fromHtml(article.getTitle()).subSequence(0,50) + "...");
-        }
-
-
         title.setText(Html.fromHtml(article.getTitle()));
         description.setText(Html.fromHtml(article.getContent()));
         publisher.setText(Html.fromHtml(article.getPublisher()));
