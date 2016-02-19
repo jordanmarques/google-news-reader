@@ -42,11 +42,14 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
         text.setText(Html.fromHtml(article.getTitle()));
         tags.setText(formatTagsForDisplay(article));
 
-        if( null == article.getBitmapImage()){
+
+         if( null != article.getBitmapImage()) {
+             image.setImageBitmap(article.getBitmapImage());
+         }else if(!NetworkUtil.getConnectivityStatusBoolean(context)){
+             image.setBackground(ContextCompat.getDrawable(context, R.drawable.no_image));
+         } else {
             ImageDownloadAsyncTask imageDownloadAsyncTask = new ImageDownloadAsyncTask(getContext(), image, article);
             imageDownloadAsyncTask.execute();
-        } else {
-            image.setImageBitmap(article.getBitmapImage());
         }
 
 
