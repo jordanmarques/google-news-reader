@@ -1,7 +1,6 @@
 package com.jojo.googlenewsreader.activities;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -12,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.arrayAdapter.TagArrayAdapter;
@@ -34,16 +32,16 @@ public class TagManager extends ParentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_manager);
 
-        final EditText editText = (EditText) findViewById(R.id.editText);
-        Button createButton = (Button) findViewById(R.id.button7);
-        ListView listView = (ListView) findViewById(R.id.listView2);
+        final EditText editText = (EditText) findViewById(R.id.tag_editText);
+        Button createButton = (Button) findViewById(R.id.add_tag_button);
+        ListView listView = (ListView) findViewById(R.id.tag_listView);
         registerForContextMenu(listView);
 
         articleTagDAO = new ArticleTagDAO(this);
         tagDAO = new TagDAO(this);
         allTags = tagDAO.findAllTags();
 
-        tagArrayAdapter = new TagArrayAdapter(this, R.id.listView2, allTags);
+        tagArrayAdapter = new TagArrayAdapter(this, R.id.tag_listView, allTags);
         tagArrayAdapter.setNotifyOnChange(true);
         listView.setAdapter(tagArrayAdapter);
 
@@ -63,7 +61,7 @@ public class TagManager extends ParentActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId()==R.id.listView2) {
+        if (v.getId()==R.id.tag_listView) {
 
             ListView listView = (ListView) v;
             AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;

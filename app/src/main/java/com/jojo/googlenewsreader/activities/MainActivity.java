@@ -55,12 +55,12 @@ public class MainActivity extends ParentActivity {
         articleDAO = new ArticleDAO(this);
         articleTagDAO = new ArticleTagDAO(this);
 
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.article_listView);
         registerForContextMenu(listView);
 
         SearchView searchView = (SearchView)findViewById(R.id.searchView);
-        Button tagButton = (Button) findViewById(R.id.button);
-        Button lastNewsButton = (Button) findViewById(R.id.button3);
+        Button tagButton = (Button) findViewById(R.id.tag_button);
+        Button lastNewsButton = (Button) findViewById(R.id.refresh_button);
         label = (TextView) findViewById(R.id.networkLabel);
 
 
@@ -128,7 +128,7 @@ public class MainActivity extends ParentActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId()==R.id.listView) {
+        if (v.getId()==R.id.article_listView) {
 
             final ListView listView = (ListView) v;
             final AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;

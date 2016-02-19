@@ -2,13 +2,11 @@ package com.jojo.googlenewsreader.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.jojo.googlenewsreader.R;
@@ -71,7 +69,7 @@ public class ArticleDetail extends ParentActivity {
         }
 
 
-        webViewButton = (Button) findViewById(R.id.openWebView);
+        webViewButton = (Button) findViewById(R.id.webView_button);
         webViewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(ArticleDetail.this, BrowserView.class);
@@ -80,7 +78,7 @@ public class ArticleDetail extends ParentActivity {
             }
         });
 
-        Button backButton = (Button) findViewById(R.id.button5);
+        Button backButton = (Button) findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

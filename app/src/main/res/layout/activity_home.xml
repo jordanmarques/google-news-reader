@@ -20,7 +20,7 @@
             android:textSize="10dp"
             android:paddingTop="3dp"
             android:paddingLeft="8dp"
-            android:background="@drawable/border_color_red"
+            android:background="@drawable/label_background"
             android:layout_alignBottom="@+id/titleBar"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
@@ -51,7 +51,7 @@
             android:layout_width="50dp"
             android:textSize="8dp"
             android:layout_height="wrap_content"
-            android:id="@+id/button"
+            android:id="@+id/tag_button"
             android:background="@drawable/tag"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
@@ -62,7 +62,7 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:textSize="8dp"
-            android:id="@+id/button3"
+            android:id="@+id/refresh_button"
             android:background="@drawable/ic_action_name2"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
@@ -78,7 +78,7 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/listView"
+            android:id="@+id/article_listView"
             android:divider="@android:color/transparent"
             android:dividerHeight="-2dp"/>
 
