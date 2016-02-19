@@ -121,6 +121,12 @@ public class MainActivity extends ParentActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        MainActivity.articleCounter = 0;
+    }
+
+    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId()==R.id.listView) {
 
@@ -212,7 +218,7 @@ public class MainActivity extends ParentActivity {
 
     private void addTagToArticle(Tag tag, Article article, ListView listView, int position) {
         articleTagDAO.insertArticleTagLink(article, tag);
-        View child = listView.getChildAt(position);
+        View child = listView.getChildAt(position - listView.getFirstVisiblePosition());
         TextView textView= (TextView) child.findViewById(R.id.tags);
 
         textView.setText(formatTagToAdd(tag.getLabel(), String.valueOf(textView.getText())));
@@ -221,7 +227,7 @@ public class MainActivity extends ParentActivity {
 
     private void removeTagToArticle(Tag tag, Article article, ListView listView, int position) {
         articleTagDAO.deleteArticleTagLink(article, tag);
-        View child = listView.getChildAt(position);
+        View child = listView.getChildAt(position - listView.getFirstVisiblePosition());
         TextView textView= (TextView) child.findViewById(R.id.tags);
 
         textView.setText(formatTagToRemove(tag.getLabel(), String.valueOf(textView.getText())));

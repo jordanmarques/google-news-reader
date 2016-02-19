@@ -87,7 +87,6 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
 
     private List<Article> searchFromQuery(String query) {
         try {
-            MainActivity.articleCounter = 0;
             JSONArray jsonString = getJsonFromServer(query);
             List<Article> articleList = new ArrayList<>();
             ArticleDAO  articleDAO = new ArticleDAO(context);

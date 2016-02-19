@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/listView"
             android:divider="@android:color/transparent"
-            android:dividerHeight="8.0sp"/>
+            android:dividerHeight="-2dp"/>
 
     </RelativeLayout>
 
