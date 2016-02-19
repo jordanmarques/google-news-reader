@@ -68,7 +68,7 @@ public class MainActivity extends ParentActivity {
 
 
         search(INIT_SEARCH);
-        launchAutoUpdate(1);
+        launchAutoUpdate(30);
 
         lastNewsButton.setOnClickListener(new OnClickListener() {
             @Override

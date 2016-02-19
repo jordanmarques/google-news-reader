@@ -45,9 +45,13 @@ public class ImageDownloadAsyncTask extends AsyncTask<Void, Bitmap, Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        imageView.setImageBitmap(bitmap);
-        imageView.setBackgroundColor(Color.argb(0, 0, 0, 0));
-        article.setBitmapImage(bitmap);
+        if(null == bitmap){
+            imageView.setBackground(ContextCompat.getDrawable(context, R.drawable.no_image));
+        } else {
+            imageView.setImageBitmap(bitmap);
+            imageView.setBackgroundColor(Color.argb(0, 0, 0, 0));
+            article.setBitmapImage(bitmap);
+        }
 
     }
 }
