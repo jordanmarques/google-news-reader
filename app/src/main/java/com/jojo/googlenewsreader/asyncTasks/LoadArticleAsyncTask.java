@@ -10,6 +10,7 @@ import com.jojo.googlenewsreader.activities.MainActivity;
 import com.jojo.googlenewsreader.arrayAdapter.ArticleArrayAdapter;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
 import com.jojo.googlenewsreader.pojo.Article;
+import com.jojo.googlenewsreader.utils.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -116,8 +117,8 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
                 articleList = articleDAO.findAllArticles();
             }
 
-            populatePublishDateField(articleList);
-            sortByPublishedDate(articleList);
+            Utils.populatePublishDateField(articleList);
+            Utils.sortByPublishedDate(articleList);
 
             return articleList;
 
@@ -127,22 +128,6 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
             e.printStackTrace();
         }
         return new ArrayList<Article>();
-    }
-
-    private void sortByPublishedDate(List<Article> articleList) {
-        Collections.sort(articleList, new Comparator<Article>() {
-            public int compare(Article o1, Article o2) {
-                return o2.getPublisheDate().compareTo(o1.getPublisheDate());
-            }
-        });
-    }
-
-    private void populatePublishDateField(List<Article> articleList) throws ParseException {
-        DateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss", Locale.ENGLISH);
-        for(Article loopArticle : articleList){
-            loopArticle.setDate(loopArticle.getDate().replace(" -0800", ""));
-            loopArticle.setPublisheDate(format.parse(loopArticle.getDate()));
-        }
     }
 
     public static JSONArray getJsonFromServer(String url) throws IOException {

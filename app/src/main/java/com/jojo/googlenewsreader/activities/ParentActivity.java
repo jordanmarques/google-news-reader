@@ -13,6 +13,9 @@ import com.jojo.googlenewsreader.brodcastReceiver.NetworkChangeReceiver;
 
 public class ParentActivity extends Activity {
 
+    private BroadcastReceiver networkChangeReceive;
+    private IntentFilter filter;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -20,9 +23,20 @@ public class ParentActivity extends Activity {
         setContentView(R.layout.activity_title_bar);
         this.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.activity_title_bar);
 
-        BroadcastReceiver networkChangeReceive = new NetworkChangeReceiver();
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        networkChangeReceive = new NetworkChangeReceiver();
+        filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeReceive, filter);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(networkChangeReceive, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(networkChangeReceive);
+    }
 }

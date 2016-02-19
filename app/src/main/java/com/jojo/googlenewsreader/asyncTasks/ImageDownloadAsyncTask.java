@@ -35,10 +35,8 @@ public class ImageDownloadAsyncTask extends AsyncTask<Void, Bitmap, Bitmap> {
             if(article.getImageUrl().isEmpty() || null == article.getImageUrl()){
                 return null;
             }
-
             URL newurl = new URL(article.getImageUrl());
             return BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,13 +45,9 @@ public class ImageDownloadAsyncTask extends AsyncTask<Void, Bitmap, Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        if(NetworkUtil.getConnectivityStatusBoolean(context)){
-            imageView.setImageBitmap(bitmap);
-            imageView.setBackgroundColor(Color.argb(0, 0, 0, 0));
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                imageView.setBackground(ContextCompat.getDrawable(context, R.drawable.no_image));
-            }
-        }
+        imageView.setImageBitmap(bitmap);
+        imageView.setBackgroundColor(Color.argb(0, 0, 0, 0));
+        article.setBitmapImage(bitmap);
+
     }
 }

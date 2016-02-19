@@ -29,9 +29,12 @@ import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleTagDAO;
 import com.jojo.googlenewsreader.dataBase.DAO.TagDAO;
 import com.jojo.googlenewsreader.pojo.Article;
+import com.jojo.googlenewsreader.pojo.ArticleForSerialization;
 import com.jojo.googlenewsreader.pojo.Tag;
 import com.jojo.googlenewsreader.utils.NetworkUtil;
+import com.jojo.googlenewsreader.utils.Utils;
 
+import java.text.ParseException;
 import java.util.List;
 
 
@@ -96,9 +99,8 @@ public class MainActivity extends ParentActivity {
                     ArticleDetail.setImage(imageView.getDrawingCache());
                 }
 
-
                 Intent intent = new Intent(MainActivity.this, ArticleDetail.class);
-                intent.putExtra("articleForDetailActivity", articleList.get(position));
+                intent.putExtra("articleForDetailActivity", new ArticleForSerialization(articleList.get(position)));
 
                 startActivityForResult(intent, 0);
 
@@ -255,6 +257,12 @@ public class MainActivity extends ParentActivity {
 
     private void tagSearch(String query) {
         articleList = articleDAO.findByTag(query.substring(1));
+        try {
+            Utils.populatePublishDateField(articleList);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Utils.sortByPublishedDate(articleList);
         ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
         listView.setAdapter(arrayAdapter);
         setCurrentQuery(INIT_SEARCH);
@@ -263,11 +271,23 @@ public class MainActivity extends ParentActivity {
     private void localSearch(String query) {
         if(query.equals(INIT_SEARCH)){
             articleList = articleDAO.findAllArticles();
+            try {
+                Utils.populatePublishDateField(articleList);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Utils.sortByPublishedDate(articleList);
             ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
             listView.setAdapter(arrayAdapter);
             setCurrentQuery(INIT_SEARCH);
         } else {
             articleList = articleDAO.findByTitle(query);
+            try {
+                Utils.populatePublishDateField(articleList);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Utils.sortByPublishedDate(articleList);
             ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
             listView.setAdapter(arrayAdapter);
             setCurrentQuery(query);

@@ -1,6 +1,7 @@
 package com.jojo.googlenewsreader.arrayAdapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,16 +11,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jojo.googlenewsreader.R;
+import com.jojo.googlenewsreader.activities.MainActivity;
 import com.jojo.googlenewsreader.asyncTasks.ImageDownloadAsyncTask;
 import com.jojo.googlenewsreader.pojo.Article;
 import com.jojo.googlenewsreader.pojo.Tag;
+import com.jojo.googlenewsreader.utils.NetworkUtil;
 
 import java.util.List;
 
 public class ArticleArrayAdapter extends ArrayAdapter<Article> {
 
+    private Context context;
+
     public ArticleArrayAdapter(Context context, int resource, List<Article> objects) {
         super(context, resource, objects);
+        this.context = context;
     }
 
     @Override
@@ -36,8 +42,14 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
         text.setText(Html.fromHtml(article.getTitle()));
         tags.setText(formatTagsForDisplay(article));
 
-        ImageDownloadAsyncTask imageDownloadAsyncTask = new ImageDownloadAsyncTask(getContext(), image, article);
-        imageDownloadAsyncTask.execute();
+        if( null == article.getBitmapImage()){
+            ImageDownloadAsyncTask imageDownloadAsyncTask = new ImageDownloadAsyncTask(getContext(), image, article);
+            imageDownloadAsyncTask.execute();
+        } else {
+            image.setImageBitmap(article.getBitmapImage());
+        }
+
+
 
         return line;
     }
