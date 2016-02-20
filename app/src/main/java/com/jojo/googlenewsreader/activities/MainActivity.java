@@ -1,5 +1,6 @@
 package com.jojo.googlenewsreader.activities;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.arrayAdapter.ArticleArrayAdapter;
 import com.jojo.googlenewsreader.asyncTasks.LoadArticleAsyncTask;
+import com.jojo.googlenewsreader.brodcastReceiver.AlarmBroadcastReceiver;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleDAO;
 import com.jojo.googlenewsreader.dataBase.DAO.ArticleTagDAO;
 import com.jojo.googlenewsreader.dataBase.DAO.TagDAO;
@@ -46,19 +48,23 @@ public class MainActivity extends ParentActivity {
 
     public static final String INIT_SEARCH = "init_search";
 
-    private ListView listView;
-    private ArticleDAO articleDAO;
+    private static ListView listView;
+    private static ArticleDAO articleDAO;
     private ArticleTagDAO articleTagDAO;
     private Runnable runnable;
     private Handler handler;
+    private PendingIntent pendingIntent;
+    private AlarmManager alarmManager;
     private static TextView label;
 
     public static List<Article> articleList;
+    public static Context context;
     public static int articleCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.activity_home);
         articleDAO = new ArticleDAO(this);
         articleTagDAO = new ArticleTagDAO(this);
@@ -82,7 +88,12 @@ public class MainActivity extends ParentActivity {
 
         titleBar.addView(optionMenu, layoutParams);
 
-        search(INIT_SEARCH);
+        search(INIT_SEARCH, MainActivity.this);
+
+        alarmManager=(AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(MainActivity.this, AlarmBroadcastReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
+
 
         optionMenu.setOnClickListener(new OnClickListener() {
             @Override
@@ -98,7 +109,7 @@ public class MainActivity extends ParentActivity {
                 popupOption.getMenu().add(1, 1, 1, "1 minute").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        launchAutoUpdate(1);
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),60*1000, pendingIntent);
                         Toast.makeText(MainActivity.this, "Mise à jour automatique toutes les minutes", Toast.LENGTH_SHORT).show();
                         return false;
                     }
@@ -106,7 +117,7 @@ public class MainActivity extends ParentActivity {
                 popupOption.getMenu().add(1, 1, 1, "15 minutes").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        launchAutoUpdate(15);
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 15 * 60 * 1000, pendingIntent);
                         Toast.makeText(MainActivity.this, "Mise à jour automatique toutes les 15 minutes", Toast.LENGTH_SHORT).show();
                         return false;
                     }
@@ -114,7 +125,7 @@ public class MainActivity extends ParentActivity {
                 popupOption.getMenu().add(1, 1, 1, "30 minutes").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        launchAutoUpdate(30);
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 30 * 60 * 1000, pendingIntent);
                         Toast.makeText(MainActivity.this, "Mise à jour automatique toutes les 30 minutes", Toast.LENGTH_SHORT).show();
                         return false;
                     }
@@ -122,7 +133,7 @@ public class MainActivity extends ParentActivity {
                 popupOption.getMenu().add(1, 1, 1, "60 minutes").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        launchAutoUpdate(60);
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60 * 60 * 1000, pendingIntent);
                         Toast.makeText(MainActivity.this, "Mise à jour automatique toutes les 60 minutes", Toast.LENGTH_SHORT).show();
                         return false;
                     }
@@ -130,9 +141,8 @@ public class MainActivity extends ParentActivity {
                 popupOption.getMenu().add(1, 1, 1, "Désactiver").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        if(removeAutoUpdate()){
-                            Toast.makeText(MainActivity.this, "Mise à jour automatique désactivé", Toast.LENGTH_SHORT).show();
-                        }
+                        alarmManager.cancel(pendingIntent);
+                        Toast.makeText(MainActivity.this, "Mise à jour automatique désactivé", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 });
@@ -149,7 +159,7 @@ public class MainActivity extends ParentActivity {
                 if(NetworkUtil.getConnectivityStatusBoolean(MainActivity.this)){
                     Toast.makeText(getApplicationContext(), "Chargement des dernier articles...", Toast.LENGTH_SHORT).show();
                 }
-                search(INIT_SEARCH);
+                search(INIT_SEARCH, MainActivity.this);
             }
         });
 
@@ -184,7 +194,7 @@ public class MainActivity extends ParentActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                search(query);
+                search(query, MainActivity.this);
                 return false;
             }
             @Override
@@ -317,18 +327,18 @@ public class MainActivity extends ParentActivity {
         return textViewValue.replace(tagToAdd, "");
     }
 
-    private void search(String query) {
+    public static void search(String query, Context context) {
 
         if(query.charAt(0) == "#".charAt(0)) {
-            tagSearch(query);
-        }else if(NetworkUtil.getConnectivityStatusBoolean(MainActivity.this)){
-            webSearch(query);
+            tagSearch(query, context);
+        }else if(NetworkUtil.getConnectivityStatusBoolean(context)){
+            webSearch(query, context);
         } else {
-            localSearch(query);
+            localSearch(query, context);
         }
     }
 
-    private void tagSearch(String query) {
+    private static void tagSearch(String query, Context context) {
         articleList = articleDAO.findByTag(query.substring(1));
         try {
             Utils.populatePublishDateField(articleList);
@@ -336,11 +346,11 @@ public class MainActivity extends ParentActivity {
             e.printStackTrace();
         }
         Utils.sortByPublishedDate(articleList);
-        ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
+        ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(context, R.layout.article_line, articleList);
         listView.setAdapter(arrayAdapter);
     }
 
-    private void localSearch(String query) {
+    private static void localSearch(String query, Context context) {
         if(query.equals(INIT_SEARCH)){
             articleList = articleDAO.findAllArticles();
             try {
@@ -349,7 +359,7 @@ public class MainActivity extends ParentActivity {
                 e.printStackTrace();
             }
             Utils.sortByPublishedDate(articleList);
-            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
+            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(context, R.layout.article_line, articleList);
             listView.setAdapter(arrayAdapter);
         } else {
             articleList = articleDAO.findByTitle(query);
@@ -359,17 +369,17 @@ public class MainActivity extends ParentActivity {
                 e.printStackTrace();
             }
             Utils.sortByPublishedDate(articleList);
-            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(this, R.layout.article_line, articleList);
+            ArticleArrayAdapter arrayAdapter = new ArticleArrayAdapter(context, R.layout.article_line, articleList);
             listView.setAdapter(arrayAdapter);
         }
     }
 
-    private void webSearch(String query) {
+    private static void webSearch(String query, Context context) {
         if(query.equals(INIT_SEARCH)){
-            LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, LoadArticleAsyncTask.DEFAULT_RESEARCH);
+            LoadArticleAsyncTask task = new LoadArticleAsyncTask(context , listView, LoadArticleAsyncTask.DEFAULT_RESEARCH);
             task.execute();
         } else {
-            LoadArticleAsyncTask task = new LoadArticleAsyncTask(MainActivity.this , listView, query);
+            LoadArticleAsyncTask task = new LoadArticleAsyncTask(context , listView, query);
             task.execute();
         }
     }
@@ -389,62 +399,6 @@ public class MainActivity extends ParentActivity {
             final int childIndex = pos - firstListItemPosition;
             return listView.getChildAt(childIndex);
         }
-    }
-
-    public void notification(String content){
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Google News Reader")
-                .setAutoCancel(true)
-                .setContentText(content);
-
-        Intent resultIntent = new Intent(this, MainActivity.class);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(this);
-        stackBuilder.addNextIntent(resultIntent);
-
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(resultPendingIntent);
-
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(0, mBuilder.build());
-    }
-
-    public void launchAutoUpdate(int minutes){
-        handler = new Handler();
-        final int delay = minutes*60*1000; //minutes
-
-        runnable = new Runnable() {
-            public void run() {
-                if (NetworkUtil.getConnectivityStatusBoolean(MainActivity.this)) {
-                    search(INIT_SEARCH);
-                    switch (articleCounter) {
-                        case 0:
-                            notification("Aucun nouvel article chargé");
-                            break;
-                        case 1:
-                            notification("1 nouvel article chargé");
-                            break;
-                        default:
-                            notification(articleCounter + " nouveaux articles chargés");
-                            break;
-                    }
-                } else {
-                    notification("Chargement Impossible: Pas de Réseau");
-                }
-                handler.postDelayed(this, delay);
-            }
-        };
-        handler.postDelayed(runnable, delay);
-    }
-
-    public boolean removeAutoUpdate(){
-        if(null != runnable && null != handler){
-            handler.removeCallbacks(runnable);
-            return true;
-        }
-        return false;
     }
 
     public static void setArticleList(List articleList) {

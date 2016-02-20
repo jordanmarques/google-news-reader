@@ -26,6 +26,12 @@
         </activity>
         <activity android:name=".activities.TagManager" >
         </activity>
+
+        <receiver
+            android:name=".brodcastReceiver.AlarmBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>
