@@ -19,15 +19,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +29,7 @@ import org.json.JSONObject;
 
 public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
 
-    public static final String DEFAULT_RESEARCH = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=''";
+    public static final String DEFAULT_SEARCH = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=''";
 
     private static final String API_URL = "https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=";
 
@@ -65,8 +59,8 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
 
         List<Article> articles = new ArrayList<>();
         try {
-            if(query.equals(DEFAULT_RESEARCH)){
-                articles = searchFromQuery(DEFAULT_RESEARCH);
+            if(query.equals(DEFAULT_SEARCH)){
+                articles = searchFromQuery(DEFAULT_SEARCH);
             } else {
                 query = URLEncoder.encode(query, "UTF-8");
                 articles = searchFromQuery(API_URL + query);
@@ -109,7 +103,7 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
                 if(!articleDAO.isArticleInDB(article)){
                     long articleId = articleDAO.insertArticle(article);
                     articleList.add(articleDAO.findById(articleId));
-                    MainActivity.articleCounter =+ 1;
+                    MainActivity.articleCounter = MainActivity.articleCounter + 1;
                 } else {
                     Article byTitleStrict = articleDAO.findByTitleStrict(article);
                     if(byTitleStrict.getDeleted() == 0) {
@@ -118,7 +112,7 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
                 }
             }
 
-            if(query.equals(DEFAULT_RESEARCH)){
+            if(query.equals(DEFAULT_SEARCH)){
                 articleList = articleDAO.findAllArticles();
             }
 

@@ -1,14 +1,11 @@
 package com.jojo.googlenewsreader.activities;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
 import android.text.SpannableString;
@@ -42,13 +39,13 @@ import com.jojo.googlenewsreader.utils.Utils;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends ParentActivity {
 
     public static final String INIT_SEARCH = "init_search";
 
-    private static ListView listView;
     private static ArticleDAO articleDAO;
     private ArticleTagDAO articleTagDAO;
     private Runnable runnable;
@@ -58,6 +55,7 @@ public class MainActivity extends ParentActivity {
     private static TextView label;
 
     public static List<Article> articleList;
+    public static ListView listView;
     public static Context context;
     public static int articleCounter;
 
@@ -88,9 +86,9 @@ public class MainActivity extends ParentActivity {
 
         titleBar.addView(optionMenu, layoutParams);
 
-        search(INIT_SEARCH, MainActivity.this);
+        search(INIT_SEARCH);
 
-        alarmManager=(AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(MainActivity.this, AlarmBroadcastReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
 
@@ -159,7 +157,7 @@ public class MainActivity extends ParentActivity {
                 if(NetworkUtil.getConnectivityStatusBoolean(MainActivity.this)){
                     Toast.makeText(getApplicationContext(), "Chargement des dernier articles...", Toast.LENGTH_SHORT).show();
                 }
-                search(INIT_SEARCH, MainActivity.this);
+                search(INIT_SEARCH);
             }
         });
 
@@ -194,7 +192,7 @@ public class MainActivity extends ParentActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                search(query, MainActivity.this);
+                search(query);
                 return false;
             }
             @Override
@@ -327,18 +325,18 @@ public class MainActivity extends ParentActivity {
         return textViewValue.replace(tagToAdd, "");
     }
 
-    public static void search(String query, Context context) {
+    public void search(String query) {
 
         if(query.charAt(0) == "#".charAt(0)) {
-            tagSearch(query, context);
+            tagSearch(query);
         }else if(NetworkUtil.getConnectivityStatusBoolean(context)){
-            webSearch(query, context);
+            webSearch(query);
         } else {
-            localSearch(query, context);
+            localSearch(query);
         }
     }
 
-    private static void tagSearch(String query, Context context) {
+    private void tagSearch(String query) {
         articleList = articleDAO.findByTag(query.substring(1));
         try {
             Utils.populatePublishDateField(articleList);
@@ -350,7 +348,7 @@ public class MainActivity extends ParentActivity {
         listView.setAdapter(arrayAdapter);
     }
 
-    private static void localSearch(String query, Context context) {
+    private void localSearch(String query) {
         if(query.equals(INIT_SEARCH)){
             articleList = articleDAO.findAllArticles();
             try {
@@ -374,13 +372,24 @@ public class MainActivity extends ParentActivity {
         }
     }
 
-    private static void webSearch(String query, Context context) {
+    private void webSearch(String query) {
         if(query.equals(INIT_SEARCH)){
-            LoadArticleAsyncTask task = new LoadArticleAsyncTask(context , listView, LoadArticleAsyncTask.DEFAULT_RESEARCH);
+            LoadArticleAsyncTask task = new LoadArticleAsyncTask(context , listView, LoadArticleAsyncTask.DEFAULT_SEARCH);
             task.execute();
         } else {
             LoadArticleAsyncTask task = new LoadArticleAsyncTask(context , listView, query);
             task.execute();
+        }
+    }
+
+    public static void waitingSearch(Context context){
+        LoadArticleAsyncTask task = new LoadArticleAsyncTask(context , listView, LoadArticleAsyncTask.DEFAULT_SEARCH);
+        try {
+            task.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
     }
 

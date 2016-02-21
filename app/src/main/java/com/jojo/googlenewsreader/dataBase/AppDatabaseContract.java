@@ -10,7 +10,7 @@ public class AppDatabaseContract {
     public static abstract class AppDatabaseEntry implements BaseColumns{
 
         public static final String DATABASE_NAME = "Google-news-reader-DB.db";
-        public static final int DATABASE_VERSION = 3;
+        public static final int DATABASE_VERSION = 1;
 
         public static final String DATABASE_ARTICLE_TABLE = "Article";
         public static final String DATABASE_ARTICLE_COLUMN_ID = "id";

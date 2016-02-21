@@ -10,7 +10,10 @@ import android.support.v4.app.NotificationCompat;
 
 import com.jojo.googlenewsreader.R;
 import com.jojo.googlenewsreader.activities.MainActivity;
+import com.jojo.googlenewsreader.asyncTasks.LoadArticleAsyncTask;
 import com.jojo.googlenewsreader.utils.NetworkUtil;
+
+import java.util.concurrent.ExecutionException;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
     public AlarmBroadcastReceiver() {
@@ -21,7 +24,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         String content;
 
         if (NetworkUtil.getConnectivityStatusBoolean(context)) {
-            MainActivity.search(MainActivity.INIT_SEARCH, MainActivity.context);
+            MainActivity.waitingSearch(MainActivity.context);
             switch (MainActivity.articleCounter) {
                 case 0:
                     content = "Aucun nouvel article chargé";
