@@ -1,6 +1,7 @@
 package com.jojo.googlenewsreader.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -27,6 +28,7 @@ public class TagManager extends ParentActivity {
     private ArticleTagDAO articleTagDAO;
     private static List<Tag> allTags;
     private static TagArrayAdapter tagArrayAdapter;
+    private boolean tagDeleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,15 @@ public class TagManager extends ParentActivity {
         });
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(tagDeleted){
+            MainActivity.waitingSearch(MainActivity.context);
+        }
+    }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId()==R.id.tag_listView) {
@@ -85,6 +96,7 @@ public class TagManager extends ParentActivity {
     public void deleteTag(Tag tag){
         tagDAO.deleteTag(tag);
         articleTagDAO.deleteArticleTagLink(tag);
+        tagDeleted = true;
     }
 
     public static void hideSoftKeyboard(Activity activity) {

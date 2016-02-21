@@ -63,6 +63,7 @@ public class MainActivity extends ParentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+
         setContentView(R.layout.activity_home);
         articleDAO = new ArticleDAO(this);
         articleTagDAO = new ArticleTagDAO(this);
@@ -206,7 +207,9 @@ public class MainActivity extends ParentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         MainActivity.articleCounter = 0;
+
     }
 
     @Override
