@@ -2,6 +2,7 @@ package com.jojo.googlenewsreader.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,10 +72,10 @@ public class TagManager extends ParentActivity {
             menu.add(Menu.NONE,1 ,1, "Supprimer").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
+                    Log.d("toto","toto");
                     deleteTag(tag);
                     getAllTags().remove(tag);
-                    getTagArrayAdapter().notifyDataSetChanged();
-//                    Toast.makeText(TagManager.this, "Tag supprimé ", Toast.LENGTH_SHORT).show();
+                    tagArrayAdapter.notifyDataSetChanged();
                     return false;
                 }
             });
