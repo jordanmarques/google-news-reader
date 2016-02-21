@@ -48,8 +48,6 @@ public class MainActivity extends ParentActivity {
 
     private static ArticleDAO articleDAO;
     private ArticleTagDAO articleTagDAO;
-    private Runnable runnable;
-    private Handler handler;
     private PendingIntent pendingIntent;
     private AlarmManager alarmManager;
     private static TextView label;
