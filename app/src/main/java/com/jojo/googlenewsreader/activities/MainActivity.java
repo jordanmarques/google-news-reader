@@ -239,11 +239,14 @@ public class MainActivity extends ParentActivity {
                 public boolean onMenuItemClick(MenuItem item) {
                     final int position = acmi.position;
                     PopupMenu popup = new PopupMenu(MainActivity.this, getViewByPosition(position, listView));
-
                     final TagDAO tagDAO = new TagDAO(MainActivity.this);
+
                     List<Tag> allTags = tagDAO.findAllTags();
+
                     for (Tag tag : allTags) {
-                        popup.getMenu().add(1, 1, 1, tag.getLabel());
+                        if(!article.getTagList().contains(tag)){
+                            popup.getMenu().add(1, 1, 1, tag.getLabel());
+                        }
                     }
 
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
