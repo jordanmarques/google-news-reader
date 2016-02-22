@@ -91,7 +91,15 @@ public class ArticleDetail extends ParentActivity {
     public static void onNetworkChange(Boolean networkState){
         if(null != webViewButton){
             webViewButton.setEnabled(networkState);
+
+            if(!networkState){
+                webViewButton.setVisibility(View.INVISIBLE);
+            } else {
+                webViewButton.setVisibility(View.VISIBLE);
+            }
         }
+
+
     }
 
     public static Bitmap getImage() {
