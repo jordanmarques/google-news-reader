@@ -315,7 +315,7 @@ public class MainActivity extends ParentActivity {
         TextView textView= (TextView) child.findViewById(R.id.tags);
 
         textView.setText(formatTagToRemove(tag.getLabel(), String.valueOf(textView.getText())));
-        articleList.get(position).getTagList().add(tag);
+        articleList.get(position).getTagList().remove(tag);
     }
 
     private String formatTagToAdd(String tagToAdd, String textViewValue) {
