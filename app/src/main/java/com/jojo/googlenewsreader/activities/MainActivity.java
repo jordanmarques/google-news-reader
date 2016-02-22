@@ -268,7 +268,7 @@ public class MainActivity extends ParentActivity {
 
                     final TagDAO tagDAO = new TagDAO(MainActivity.this);
 
-                    List<Tag> articleTags = article.getTagList();
+                    List<Tag> articleTags = articleDAO.findArticlesTag(article);
                     for (Tag tag : articleTags) {
                         popup.getMenu().add(1, 1, 1, tag.getLabel());
                     }
