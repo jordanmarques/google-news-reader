@@ -10,9 +10,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by jordan on 19/02/16.
- */
 public class Utils {
 
     public static void sortByPublishedDate(List<Article> articleList) {

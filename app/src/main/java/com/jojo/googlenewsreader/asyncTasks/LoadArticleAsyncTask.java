@@ -141,10 +141,9 @@ public class LoadArticleAsyncTask extends AsyncTask<Void, Void, List<Article>> {
 
         inputStream = new BufferedReader(new InputStreamReader(dc.getInputStream()));
 
-        // read the JSON results into a string
         String jsonResult = inputStream.readLine();
         try {
-            JSONObject json = new JSONObject(jsonResult); // convert String to JSONObject
+            JSONObject json = new JSONObject(jsonResult);
             json = json.getJSONObject("responseData");
             JSONArray titles = json.getJSONArray("results");
             return titles;
