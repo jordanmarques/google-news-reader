@@ -4,29 +4,29 @@ import java.io.Serializable;
 
 public class ArticleTag implements Serializable {
 
-    private long article_id;
-    private long tag_id;
+    private long articleId;
+    private long tagId;
 
     public ArticleTag(long article_id, long tag_id) {
-        this.article_id = article_id;
-        this.tag_id = tag_id;
+        this.articleId = article_id;
+        this.tagId = tag_id;
     }
 
     public ArticleTag() {
     }
 
-    public long getArticle_id() {
-        return article_id;
+    public long getArticleId() {
+        return articleId;
     }
-    public void setArticle_id(long article_id) {
-        this.article_id = article_id;
+    public void setArticleId(long articleId) {
+        this.articleId = articleId;
     }
 
-    public long getTag_id() {
-        return tag_id;
+    public long getTagId() {
+        return tagId;
     }
-    public void setTag_id(long tag_id) {
-        this.tag_id = tag_id;
+    public void setTagId(long tagId) {
+        this.tagId = tagId;
     }
 
     @Override
@@ -36,14 +36,14 @@ public class ArticleTag implements Serializable {
 
         ArticleTag that = (ArticleTag) o;
 
-        if (article_id != that.article_id) return false;
-        return tag_id == that.tag_id;
+        if (articleId != that.articleId) return false;
+        return tagId == that.tagId;
 
     }
     @Override
     public int hashCode() {
-        int result = (int) (article_id ^ (article_id >>> 32));
-        result = 31 * result + (int) (tag_id ^ (tag_id >>> 32));
+        int result = (int) (articleId ^ (articleId >>> 32));
+        result = 31 * result + (int) (tagId ^ (tagId >>> 32));
         return result;
     }
 }
